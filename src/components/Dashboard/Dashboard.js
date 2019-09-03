@@ -95,7 +95,7 @@ class Dashboard extends Component {
               container
             >
               <Grid item>
-                <img src="../logo200.png" alt="Kitten" height="50" width="50" />
+                
               </Grid>
 
               <Grid item>
