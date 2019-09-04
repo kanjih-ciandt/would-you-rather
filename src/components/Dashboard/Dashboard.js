@@ -2,19 +2,16 @@ import React, { Component } from 'react'
 import AppBar from '@material-ui/core/AppBar';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Grid from '@material-ui/core/Grid';
 
-import HeartIcon from '@material-ui/core/IconButton';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import { connect } from 'react-redux'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -142,4 +139,10 @@ class Dashboard extends Component {
   }
 }
 
-export default withStyles(useStyles)(Dashboard);
+function mapStateToProps ({authedUser, users, tweets}, { id }) {
+  return {
+    authedUser,
+  }
+}
+
+export default connect(mapStateToProps) (withStyles(useStyles)(Dashboard));

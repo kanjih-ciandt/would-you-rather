@@ -3,32 +3,12 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-
-import Link from '@material-ui/core/Link';
+import { connect } from 'react-redux'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
-
-const currencies = [
-    {
-      value: 'USD',
-      label: '$',
-    },
-    {
-      value: 'EUR',
-      label: '€',
-    },
-    {
-      value: 'BTC',
-      label: '฿',
-    },
-    {
-      value: 'JPY',
-      label: '¥',
-    },
-  ];
+import {login} from '../../actions/authedUser'
 
 
 const useStyles = theme => ({
@@ -61,27 +41,31 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currency: 'EUR',
-
+          username: '',
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     
     }
 
-
-
     handleChange(event, newValue) {
-        console.log(newValue);
         this.setState(() => ({
-            currency: newValue.key
+            username: newValue.key
           }));
-        
-    
-      }
+    }
+
+    handleSubmit(e) {
+        this.setState({ submitted: true });
+        const { username} = this.state;
+        if (username) {
+          this.props.dispatch(login(username))
+            
+        }
+    }
   
     render (){
-        const { currency } = this.state;
-        const { classes, value } = this.props;
+        const { username } = this.state;
+        const { classes } = this.props;
         return (
             <Container component="main" maxWidth="xs">
               <CssBaseline />
@@ -92,15 +76,12 @@ class Login extends Component {
                 <Typography component="h1" variant="h5">
                   Sign in
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} onSubmit={this.handleSubmit}>
                   <TextField
-                    
                     id="user"
-                    value={currency}
+                    value={username}
                     select
                     label="User Name"
-                    name="email"
-                    autoComplete="email"
                     autoFocus
                     variant="outlined"
                     margin="normal"
@@ -112,9 +93,9 @@ class Login extends Component {
                         },
                     }}>
                     
-                    {currencies.map(option => (
-                    <option key={option.value} value={option.value}>
-                        {option.label}
+                    {this.props.usersIds.map(option => (
+                    <option key={option.id} value={option.id}>
+                        {option.name}
                     </option>
                     ))}
                     </TextField>
@@ -134,4 +115,11 @@ class Login extends Component {
     }
 }
 
-export default withStyles(useStyles)(Login);
+function mapStateToProps ({ users }) {
+  return {
+    usersIds: Object.values(users)
+  }
+}
+
+
+export default connect(mapStateToProps) (withStyles(useStyles)(Login));
