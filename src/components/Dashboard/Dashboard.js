@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import AppBar from '@material-ui/core/AppBar';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
+import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
+import Link from '@material-ui/core/Link';
 // import PropTypes from 'prop-types';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Grid from '@material-ui/core/Grid';
+import {logout} from '../../actions/authedUser'
 
 
 import { connect } from 'react-redux'
@@ -70,6 +71,7 @@ class Dashboard extends Component {
 
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
 
   }
 
@@ -78,8 +80,12 @@ class Dashboard extends Component {
     this.setState(() => ({
       tabPosition: newValue
     }));
-
   }
+
+  handleSubmit(e) {
+    this.props.dispatch(logout(this.props.authedUser))
+    
+}
 
   render() {
     const { tabPosition } = this.state;
@@ -114,7 +120,13 @@ class Dashboard extends Component {
                   >
                     <Grid item>Hello {user}</Grid>
                     <Grid item>{avatar}</Grid>
-                    <Grid item>Logout</Grid>
+                    <Grid item><Link
+                      component="button"
+                      color="inherit"
+                      onClick={this.handleSubmit}>
+                      Logout
+                    </Link>
+                    </Grid>
                   </Grid>
               </Grid>
             </Grid>

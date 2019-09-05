@@ -25,3 +25,16 @@ export function login (username) {
   }
 } 
 
+export function logout () {
+  return (dispatch) => {
+    dispatch(showLoading())
+    return userService.login()
+      .then(() =>{
+        dispatch(setAuthedUser(null))
+        dispatch(hideLoading())
+        history.push('/login')
+
+      });
+  }
+} 
+
