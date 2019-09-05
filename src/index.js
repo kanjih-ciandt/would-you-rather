@@ -10,6 +10,7 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
 import middleware from './middleware'
+import { loadState, saveState} from './context/localStorage'
 
 
 const theme = createMuiTheme({
@@ -27,7 +28,14 @@ const theme = createMuiTheme({
   },
 });
 
-const store = createStore(reducer, middleware)
+const persistedState = loadState()
+const store = createStore(reducer, persistedState, middleware)
+
+store.subscribe( () => {
+  saveState({
+    authedUser: store.getState().authedUser
+  });
+});
 
 ReactDOM.render(
   <Provider store={store}>

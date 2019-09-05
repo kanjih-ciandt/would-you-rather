@@ -81,6 +81,7 @@ class Dashboard extends Component {
   render() {
     const { tabPosition } = this.state;
     const { classes } = this.props;
+    const user = this.props.authedUser ? this.props.authedUser.name : ''
 
     return (
       <div className={classes.root}>
@@ -92,7 +93,6 @@ class Dashboard extends Component {
               container
             >
               <Grid item>
-                
               </Grid>
 
               <Grid item>
@@ -103,6 +103,7 @@ class Dashboard extends Component {
 
               <Grid item>
                 <div>
+                  Hello {user}
                   <IconButton
                   aria-label="account of current user"
                   aria-controls="menu-appbar"
@@ -110,7 +111,8 @@ class Dashboard extends Component {
                   color="inherit"
                 >
                 <AccountCircle />
-              </IconButton>
+                </IconButton>
+                Logout
                 </div>
               </Grid>
             </Grid>

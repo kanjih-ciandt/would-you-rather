@@ -3,13 +3,15 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import { connect } from 'react-redux'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {login} from '../../actions/authedUser'
-
+import { getUsers } from '../../services/api'
+import { apiService } from '../../services/api.service'
+import MenuItem from '@material-ui/core/MenuItem';
+import { connect } from 'react-redux'
 
 const useStyles = theme => ({
   '@global': {
@@ -42,6 +44,7 @@ class Login extends Component {
         super(props);
         this.state = {
           username: '',
+          users: null
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -50,21 +53,33 @@ class Login extends Component {
 
     handleChange(event, newValue) {
         this.setState(() => ({
-            username: newValue.key
+            username: newValue.key,
           }));
     }
 
     handleSubmit(e) {
         this.setState({ submitted: true });
-        const { username} = this.state;
+        const { username, users } = this.state;
         if (username) {
-          this.props.dispatch(login(username))
+          this.props.dispatch(login(users.find(user => user.id === username)))
             
         }
     }
+
+    componentDidMount(){
+      apiService.getUsers()
+      .then(({ users}) => {
+        console.log(users);
+        this.setState(() => ({
+          users: Object.values(users),
+        }));
+        
+      })
+      
+    }
   
     render (){
-        const { username } = this.state;
+        const { username, users } = this.state;
         const { classes } = this.props;
         return (
             <Container component="main" maxWidth="xs">
@@ -93,10 +108,10 @@ class Login extends Component {
                         },
                     }}>
                     
-                    {this.props.usersIds.map(option => (
-                    <option key={option.id} value={option.id}>
+                    {users && users.map(option => (
+                    <MenuItem key={option.id} value={option.id}>
                         {option.name}
-                    </option>
+                    </MenuItem>
                     ))}
                     </TextField>
                   <Button
@@ -115,11 +130,6 @@ class Login extends Component {
     }
 }
 
-function mapStateToProps ({ users }) {
-  return {
-    usersIds: Object.values(users)
-  }
-}
 
 
-export default connect(mapStateToProps) (withStyles(useStyles)(Login));
+export default connect() (withStyles(useStyles)(Login));
