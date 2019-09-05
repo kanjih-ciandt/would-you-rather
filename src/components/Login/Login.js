@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {login} from '../../actions/authedUser'
-import { getUsers } from '../../services/api'
 import { apiService } from '../../services/api.service'
 import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux'
@@ -29,6 +28,12 @@ const useStyles = theme => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main
   },
+  bigAvatar: {
+    margin: 10,
+    width: 60,
+    height: 60,
+    backgroundColor: theme.palette.secondary.main
+  },
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
@@ -44,7 +49,6 @@ class Login extends Component {
         super(props);
         this.state = {
           username: '',
-          users: null
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -52,8 +56,11 @@ class Login extends Component {
     }
 
     handleChange(event, newValue) {
+        const { users } = this.state;
+        const user = users.find(user => user.id === newValue.key)
         this.setState(() => ({
             username: newValue.key,
+            user: user
           }));
     }
 
@@ -61,6 +68,7 @@ class Login extends Component {
         this.setState({ submitted: true });
         const { username, users } = this.state;
         if (username) {
+
           this.props.dispatch(login(users.find(user => user.id === username)))
             
         }
@@ -79,15 +87,14 @@ class Login extends Component {
     }
   
     render (){
-        const { username, users } = this.state;
+        const { username, users, user } = this.state;
         const { classes } = this.props;
+        const avatar = user ? <Avatar alt="{user.avatarURL}" src={user.avatarURL} className={classes.bigAvatar} /> : <Avatar className={classes.bigAvatar}><LockOutlinedIcon /></Avatar>
         return (
             <Container component="main" maxWidth="xs">
               <CssBaseline />
               <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                  <LockOutlinedIcon />
-                </Avatar>
+                {avatar}
                 <Typography component="h1" variant="h5">
                   Sign in
                 </Typography>

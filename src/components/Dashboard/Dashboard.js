@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import AppBar from '@material-ui/core/AppBar';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
+import Avatar from '@material-ui/core/Avatar';
 // import PropTypes from 'prop-types';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -10,34 +11,36 @@ import Box from '@material-ui/core/Box';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Grid from '@material-ui/core/Grid';
 
-import IconButton from '@material-ui/core/IconButton';
+
 import { connect } from 'react-redux'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = theme => ({
   root: {
     flexGrow: 1,
+  },
+  container: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(12, 1fr)',
+    gridGap: theme.spacing(3),
   },
   menuButton: {
     marginRight: theme.spacing(2),
   },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
   tabs: {
     width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: 200,
-    },
     position: 'center'
   },
   toolbarButtons: {
     marginLeft: 'auto',
     position: 'right'
   },
-}));
+  
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+    position: 'center'
+  },
+});
 
 
 function TabPanel(props) {
@@ -82,50 +85,39 @@ class Dashboard extends Component {
     const { tabPosition } = this.state;
     const { classes } = this.props;
     const user = this.props.authedUser ? this.props.authedUser.name : ''
+    const avatar = this.props.authedUser ? <Avatar alt="{user.avatarURL}" src={this.props.authedUser.avatarURL} className={classes.avatar} /> : <Avatar className={classes.avatar}><AccountCircle /></Avatar>
+    
 
     return (
       <div className={classes.root}>
 
         <AppBar position="static">
-          <Toolbar>
             <Grid
-              justify="space-between" // Add it here :)
+              justify="center" // Add it here :)
               container
             >
-              <Grid item>
+              <Grid item xs={10}>
+                <Tabs value={tabPosition}
+                  className={classes.tabs}
+                  onChange={this.handleChange} aria-label="options table"
+                  centered={true}>
+                  <Tab label="Home" id="tab-0" />
+                  <Tab label="New Question" id="tab-1" />
+                  <Tab label="Leader Board" id="tab-2" />
+                </Tabs>
               </Grid>
-
-              <Grid item>
-                <Typography className={classes.title} variant="h6" noWrap >
-                  Would you Rather
-                  </Typography>
-              </Grid>
-
-              <Grid item>
-                <div>
-                  Hello {user}
-                  <IconButton
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  color="inherit"
-                >
-                <AccountCircle />
-                </IconButton>
-                Logout
-                </div>
+              <Grid item xs={2}>
+                  <Grid
+                    justify="center"
+                    alignItems="center"
+                    container
+                  >
+                    <Grid item>Hello {user}</Grid>
+                    <Grid item>{avatar}</Grid>
+                    <Grid item>Logout</Grid>
+                  </Grid>
               </Grid>
             </Grid>
-
-          </Toolbar>
-          <Tabs value={tabPosition}
-            className={classes.tabs}
-            onChange={this.handleChange} aria-label="options table"
-            centered={true}>
-            <Tab label="Home" id="tab-0" />
-            <Tab label="New Question" id="tab-1" />
-            <Tab label="Leader Board" id="tab-2" />
-          </Tabs>
         </AppBar>
         <TabPanel value={tabPosition} index={0}>
           Home
