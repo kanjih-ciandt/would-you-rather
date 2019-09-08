@@ -11,9 +11,9 @@ import Box from '@material-ui/core/Box';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Grid from '@material-ui/core/Grid';
 import {logout} from '../../actions/authedUser'
-
-
 import { connect } from 'react-redux'
+import Question from '../Question/Question'
+
 
 const useStyles = theme => ({
   root: {
@@ -67,7 +67,7 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabPosition: 2,
+      tabPosition: 0,
 
     };
     this.handleChange = this.handleChange.bind(this);
@@ -99,20 +99,23 @@ class Dashboard extends Component {
 
         <AppBar position="static">
             <Grid
-              justify="center" // Add it here :)
               container
+              direction="row"
+              justify="center"
+              alignItems="center"
             >
-              <Grid item xs={10}>
+              <Grid item xs={9}>
                 <Tabs value={tabPosition}
                   className={classes.tabs}
                   onChange={this.handleChange} aria-label="options table"
                   centered={true}>
                   <Tab label="Home" id="tab-0" />
-                  <Tab label="New Question" id="tab-1" />
-                  <Tab label="Leader Board" id="tab-2" />
+                  <Tab label="List Question" id="tab-1" />
+                  <Tab label="New Question" id="tab-2" />
+                  <Tab label="Leader Board" id="tab-3" />
                 </Tabs>
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={3}>
                   <Grid
                     justify="center"
                     alignItems="center"
@@ -132,12 +135,15 @@ class Dashboard extends Component {
             </Grid>
         </AppBar>
         <TabPanel value={tabPosition} index={0}>
-          Home
+          <Question/>
         </TabPanel>
         <TabPanel value={tabPosition} index={1}>
-          New Question
+          List Questions
         </TabPanel>
         <TabPanel value={tabPosition} index={2}>
+          New Question
+        </TabPanel>
+        <TabPanel value={tabPosition} index={3}>
           Leader Board
         </TabPanel>
       </div>
