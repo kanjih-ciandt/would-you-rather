@@ -12,7 +12,10 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Grid from '@material-ui/core/Grid';
 import {logout} from '../../actions/authedUser'
 import { connect } from 'react-redux'
-import Question from '../Question/Question'
+import Home from '../Home/Home';
+import LeaderBoard from '../LeaderBoard/LeaderBoard';
+import ListQuestion from '../ListQuestion/ListQuestion'
+import NewQuestion from '../NewQuestion/NewQuestion'
 
 
 const useStyles = theme => ({
@@ -67,7 +70,7 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabPosition: 0,
+      tabPosition: 2,
 
     };
     this.handleChange = this.handleChange.bind(this);
@@ -92,7 +95,6 @@ class Dashboard extends Component {
     const { classes } = this.props;
     const user = this.props.authedUser ? this.props.authedUser.name : ''
     const avatar = this.props.authedUser ? <Avatar alt="{user.avatarURL}" src={this.props.authedUser.avatarURL} className={classes.avatar} /> : <Avatar className={classes.avatar}><AccountCircle /></Avatar>
-    
 
     return (
       <div className={classes.root}>
@@ -135,16 +137,16 @@ class Dashboard extends Component {
             </Grid>
         </AppBar>
         <TabPanel value={tabPosition} index={0}>
-          <Question/>
+          <Home/>
         </TabPanel>
         <TabPanel value={tabPosition} index={1}>
-          List Questions
+          <ListQuestion/>
         </TabPanel>
         <TabPanel value={tabPosition} index={2}>
-          New Question
+          <NewQuestion/>
         </TabPanel>
         <TabPanel value={tabPosition} index={3}>
-          Leader Board
+          <LeaderBoard/>
         </TabPanel>
       </div>
     )

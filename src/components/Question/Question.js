@@ -1,26 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { lighten, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import { grey } from '@material-ui/core/colors';
-import { teal } from '@material-ui/core/colors';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import { grey, teal } from '@material-ui/core/colors';
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
 
@@ -37,11 +27,11 @@ const useStyles = theme => ({
     container: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center' 
+        justifyContent: 'center',
 
     },
     card: {
-        // maxWidth: 400,
+        maxWidth: 600,
     },
     cardHeader: {
         backgroundColor: grey[300],
@@ -145,6 +135,28 @@ function QuestionOpen (props) {
         </React.Fragment>
 }
 
+function QuestionPreview (props) {
+    return  <React.Fragment>
+            <Typography component="h5" variant="h5">
+                Would You Rather ...
+            </Typography>
+            <form className={props.classes.form} >
+                <Typography>
+                    ... find $50 yourse..
+                </Typography>
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={props.classes.submit}
+                >
+                    View Pow
+                </Button>
+            </form>
+        </React.Fragment>
+}
+
 function QuestionClosed (props) {
     return  <React.Fragment>
             <Typography component="h5" variant="h5">
@@ -165,7 +177,6 @@ function QuestionClosed (props) {
                             }
                         }
                     }
-
                 />
                 <Typography align='center'>
                     2 out 3 votes
@@ -189,8 +200,6 @@ function QuestionClosed (props) {
                     1 out 3 votes
                 </Typography>
             </div>
-            
-            
         </React.Fragment>
 }
 
@@ -200,9 +209,6 @@ class Question extends Component {
     render(){
         const { classes } = this.props;
         return (
-            <React.Fragment>
-            <CssBaseline />
-            <Container maxWidth="md" className={classes.container}>
             <Card className={classes.card}>
                 <CardHeader className={classes.cardHeader}
                     subheader="Tyler MCGinnis asks"
@@ -215,14 +221,11 @@ class Question extends Component {
                     
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
-                            <QuestionClosed classes={classes} />
+                            <QuestionPreview classes={classes} />
                         </CardContent>
                     </div>
                 </div>
             </Card>
-            </Container>
-            </React.Fragment>
-            
         )
     }
 }
