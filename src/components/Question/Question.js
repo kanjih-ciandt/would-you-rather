@@ -14,6 +14,12 @@ import { grey, teal } from '@material-ui/core/colors';
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
 
+export const questionType = Object.freeze({
+    OPEN:   'OPEN',
+    CLOSED:  'CLOSED',
+    PREVIEW: 'PREVIEW'
+});
+
 const useStyles = theme => ({
     root: {
         flexGrow: 1,
@@ -201,8 +207,25 @@ function QuestionClosed (props) {
 
 class Question extends Component {
     render(){
-        const { classes, questionsUser } = this.props;
+        const { classes, questionsUser, type } = this.props;
         const author = questionsUser ? `${questionsUser.authorUser.name} asks` : ''
+
+        let questionTag = null;
+        switch(type){
+            case questionType.PREVIEW:
+                questionTag = <QuestionPreview classes={classes} text={questionsUser && questionsUser.optionOne.text}/>
+                break;
+            case questionType.OPEN:
+                questionTag = <QuestionOpen/>
+                break;
+            case questionType.CLOSED:
+                    questionTag = <QuestionClosed/>
+                break;
+            default:
+                questionTag = <QuestionPreview classes={classes} text={questionsUser && questionsUser.optionOne.text}/>
+        }
+
+
         return (
             <Card className={classes.card}>
                 <CardHeader className={classes.cardHeader}
@@ -216,7 +239,7 @@ class Question extends Component {
                     
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
-                            <QuestionPreview classes={classes} text={questionsUser && questionsUser.optionOne.text}/>
+                            {questionTag}
                         </CardContent>
                     </div>
                 </div>

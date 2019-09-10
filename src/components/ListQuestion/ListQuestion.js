@@ -9,8 +9,9 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
-import Question from '../Question/Question';
+import Question,  {questionType} from '../Question/Question';
 import { apiService } from '../../services/api.service';
+
 
 
 const useStyles = theme => ({
@@ -38,8 +39,7 @@ class ListQuestion extends Component {
             element.authorUser = user[0];
           });
 
-          return Object.values(listQuestion)
-        
+          return Object.values(listQuestion);
     }
 
 
@@ -73,7 +73,7 @@ class ListQuestion extends Component {
                     <Grid key='1' item direction="column" xs={9} container justify="center" >
                         {questionsUser && questionsUser.map((question) => (
                             <Container maxWidth="md" className={classes.container} key={question.id}>
-                                <Question questionsUser={question}/>
+                                <Question questionsUser={question} type={questionType.PREVIEW}/>
                             </Container>
                         ))}
                     </Grid>

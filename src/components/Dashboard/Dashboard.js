@@ -112,7 +112,7 @@ class Dashboard extends Component {
                   onChange={this.handleChange} aria-label="options table"
                   centered={true}>
                   <Tab label="Home" id="tab-0" />
-                  <Tab label="List Question" id="tab-1" />
+                  <Tab label="Question List" id="tab-1" />
                   <Tab label="New Question" id="tab-2" />
                   <Tab label="Leader Board" id="tab-3" />
                 </Tabs>
