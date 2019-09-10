@@ -1,20 +1,17 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Container from '@material-ui/core/Container';
-import Question from '../Question/Question'
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Typography from '@material-ui/core/Typography';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import React, { Component } from 'react';
+
 import Checkbox from '@material-ui/core/Checkbox';
-import { maxWidth } from '@material-ui/system';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import { connect } from 'react-redux';
+import Question from '../Question/Question';
+import { apiService } from '../../services/api.service';
+
 
 const useStyles = theme => ({
     container: {
@@ -27,20 +24,58 @@ const useStyles = theme => ({
 });
 
 class ListQuestion extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            questionsUser: null
+        };
+    }
+
+    mergeUserDataInQuestion(listQuestion, listUsers){
+        Object.values(listQuestion).forEach(element => {
+            const user = Object.values(listUsers).filter(user => user.id === element.author);
+            element.authorUser = user[0];
+          });
+
+          return Object.values(listQuestion)
+        
+    }
+
+
+    componentDidMount(){
+
+        Promise.all([
+            apiService.getQuestions(),
+            apiService.getUsers(),
+          ]).then(result => {
+            const [ questions, users ] = result;
+            const listQuestion = Object.values(questions);
+            const listUsers = Object.values(users);
+
+
+            this.setState(() => ({
+                questionsUser: this.mergeUserDataInQuestion(listQuestion[0], listUsers[0]),
+                
+            }));
+            console.log(this.state.questionsUser)
+          });
+      }
+
     render(){
         const { classes } = this.props;
+        const { questionsUser } = this.state;
         return (
             <React.Fragment>
             <CssBaseline />
        
                 <Grid container justify="center">
                     <Grid key='1' item direction="column" xs={9} container justify="center" >
-                        <Container maxWidth="md" className={classes.container}>
-                            <Question/>
-                        </Container>
-                        <Container maxWidth="md" className={classes.container}>
-                            <Question/>
-                        </Container>
+                        {questionsUser && questionsUser.map((question) => (
+                            <Container maxWidth="md" className={classes.container} key={question.id}>
+                                <Question questionsUser={question}/>
+                            </Container>
+                        ))}
                     </Grid>
                     <Grid key='2' item xs={3}>
                         <form className={classes.form}>

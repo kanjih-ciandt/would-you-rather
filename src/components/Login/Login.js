@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {login} from '../../actions/authedUser'
-import { apiService } from '../../services/api.service'
+import CssBaseline from '@material-ui/core/CssBaseline';
 import MenuItem from '@material-ui/core/MenuItem';
-import { connect } from 'react-redux'
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { connect } from 'react-redux';
+import { login } from '../../actions/authedUser';
+import { apiService } from '../../services/api.service';
 
 const useStyles = theme => ({
   '@global': {

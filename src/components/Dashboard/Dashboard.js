@@ -70,7 +70,7 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabPosition: 2,
+      tabPosition: 1,
 
     };
     this.handleChange = this.handleChange.bind(this);

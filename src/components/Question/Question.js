@@ -14,12 +14,6 @@ import { grey, teal } from '@material-ui/core/colors';
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
 
-
-
-
-import Container from '@material-ui/core/Container';
-import { gray } from 'ansi-colors';
-
 const useStyles = theme => ({
     root: {
         flexGrow: 1,
@@ -142,7 +136,7 @@ function QuestionPreview (props) {
             </Typography>
             <form className={props.classes.form} >
                 <Typography>
-                    ... find $50 yourse..
+                    ...{props.text && props.text.substring(0, 30)} ...
                 </Typography>
                 <Button
                     type="submit"
@@ -207,21 +201,22 @@ function QuestionClosed (props) {
 
 class Question extends Component {
     render(){
-        const { classes } = this.props;
+        const { classes, questionsUser } = this.props;
+        const author = questionsUser ? `${questionsUser.authorUser.name} asks` : ''
         return (
             <Card className={classes.card}>
                 <CardHeader className={classes.cardHeader}
-                    subheader="Tyler MCGinnis asks"
+                    subheader= {author}
                 />
                 <div className={classes.cardBody}>
                     <div className={classes.divAvatar}>
-                        <Avatar alt="{user.avatarURL}" src="batman.png" className={classes.avatar} />
+                        <Avatar alt="{user.avatarURL}" src={questionsUser && questionsUser.authorUser.avatarURL} className={classes.avatar} />
                         <div className={classes.vertical}></div>
                     </div>
                     
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
-                            <QuestionPreview classes={classes} />
+                            <QuestionPreview classes={classes} text={questionsUser && questionsUser.optionOne.text}/>
                         </CardContent>
                     </div>
                 </div>
