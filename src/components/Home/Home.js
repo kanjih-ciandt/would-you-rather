@@ -5,12 +5,14 @@ import Container from '@material-ui/core/Container';
 import Question,  {questionType} from '../Question/Question'
 import { withStyles } from '@material-ui/core/styles';
 import { apiService } from '../../services/api.service';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = theme => ({
     container: {
-        // display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center' 
+        justifyContent: 'center',
+        maxWidth: 1200,
+        padding: '10px'
 
     }
 });
@@ -64,7 +66,6 @@ class Home extends Component {
                 <Question questionsUser={question} type={questionType.OPEN}/>
             </Container>
             </React.Fragment>
-            
         )
     }
 }

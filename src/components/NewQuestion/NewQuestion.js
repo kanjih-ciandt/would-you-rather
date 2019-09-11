@@ -21,6 +21,8 @@ const useStyles = theme => ({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
+        maxWidth: 1200,
+        padding: '10px'
 
     },
     card: {
