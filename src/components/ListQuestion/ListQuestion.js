@@ -15,11 +15,23 @@ import { apiService } from '../../services/api.service';
 
 const useStyles = theme => ({
     container: {
+        position: 'relative',
         alignItems: 'center',
         justifyContent: 'center',
         maxWidth: 1200,
         padding: '10px'
-    }
+    },
+    card: {
+        marginBottom: '30px'
+    },
+    status: {
+        position: 'absolute',
+        top: '0px',
+        right: '0px',
+        marginBottom: '30px'
+    },
+   
+
 });
 
 class ListQuestion extends Component {
@@ -76,47 +88,48 @@ class ListQuestion extends Component {
 
         return (
             <React.Fragment>
-                <CssBaseline />
-                <Grid container justify="center">
-                    <Grid key='0' item xs={4}>
-                    </Grid>
-                    <Grid key='1' item direction="column" xs={7} container justify="center" >
+            <CssBaseline />
+            
+                <Container maxWidth="md"  className={classes.container}>
+                    <div>
                         {questionNotAnswered && showNotAnswered && questionNotAnswered.map((question) => (
-                            <Container maxWidth="md" className={classes.container} key={question.id}>
-                                <Question questionsUser={question} type={questionType.PREVIEW}/>
-                            </Container>
+                            <div className={classes.card}>
+                                <Question questionsUser={question} type={questionType.PREVIEW} />
+                            </div>
                         ))}
                         {questionAnswered && showAnswered &&  questionAnswered.map((question) => (
-                            <Container maxWidth="md" className={classes.container} key={question.id}>
+                            <div className={classes.card}>
                                 <Question questionsUser={question} type={questionType.PREVIEW}/>
-                            </Container>
+                            </div>
                         ))}
-                    </Grid>
-                    <Grid key='2' item xs={1}>
-                            <Typography>
+                    </div>
+                    <div className ={classes.status}>
+                        <Typography>
                                 Status
-                            </Typography>
-                            <FormGroup
-                                aria-label="question"
-                                name="question">
-                                <FormControlLabel
-                                    checked={showNotAnswered}
-                                    control={<Checkbox value="showNotAnswered" />}
-                                    label="Not Answered"
-                                    onChange={handleChange('showNotAnswered')}
-                                    value="showNotAnswered"
-                                /> 
-                                <FormControlLabel
-                                    checked={showAnswered}
-                                    control={<Checkbox value="showAnswered" />}
-                                    onChange={handleChange('showAnswered')}
-                                    label="Answered"
-                                    value="showAnswered"
-                                /> 
-                            </FormGroup>
-                        </Grid>
-                    </Grid>
-            </React.Fragment>
+                        </Typography>
+                        <FormGroup
+                            aria-label="question"
+                            name="question">
+                            <FormControlLabel
+                                checked={showNotAnswered}
+                                control={<Checkbox value="showNotAnswered" />}
+                                label="Not Answered"
+                                onChange={handleChange('showNotAnswered')}
+                                value="showNotAnswered"
+                            /> 
+                            <FormControlLabel
+                                checked={showAnswered}
+                                control={<Checkbox value="showAnswered" />}
+                                onChange={handleChange('showAnswered')}
+                                label="Answered"
+                                value="showAnswered"
+                            /> 
+                        </FormGroup>
+                    </div>
+                </Container>
+                
+                
+        </React.Fragment>
         )
     }
 }
