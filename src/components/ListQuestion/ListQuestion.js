@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -16,10 +17,12 @@ import { apiService } from '../../services/api.service';
 
 const useStyles = theme => ({
     container: {
-        display: 'flex',
+        
         alignItems: 'center',
         justifyContent: 'center',
-        maxWidth: 1200
+        maxWidth: 1200,
+        padding: '10px'
+        
 
     }
 });
@@ -29,22 +32,34 @@ class ListQuestion extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            questionsUser: null
+            questionsUser: null,
+            showAnswered: true,
+            showNotAnswered: true,
         };
+        
     }
 
-    mergeUserDataInQuestion(listQuestion, listUsers){
+    
+
+    contentEnricher(listQuestion, listUsers){
         Object.values(listQuestion).forEach(element => {
             const user = Object.values(listUsers).filter(user => user.id === element.author);
             element.authorUser = user[0];
+            element.answered = this.props.authedUser.questions.includes(element.id)
           });
+          console.log(listQuestion);
 
-          return Object.values(listQuestion);
+          const listAnswered = Object.values(listQuestion).filter(question => question.answered === true)
+          const listNotAnswered = Object.values(listQuestion).filter(question => question.answered === false)
+          
+          console.log(listAnswered);
+          console.log(listNotAnswered);
+
+          return Object.values(listNotAnswered);
     }
 
 
     componentDidMount(){
-
         Promise.all([
             apiService.getQuestions(),
             apiService.getUsers(),
@@ -53,32 +68,36 @@ class ListQuestion extends Component {
             const listQuestion = Object.values(questions);
             const listUsers = Object.values(users);
 
-
             this.setState(() => ({
-                questionsUser: this.mergeUserDataInQuestion(listQuestion[0], listUsers[0]),
+                questionsUser: this.contentEnricher(listQuestion[0], listUsers[0]),
                 
             }));
-            console.log(this.state.questionsUser)
           });
       }
 
     render(){
-        const { classes } = this.props;
-        const { questionsUser } = this.state;
+        const { classes} = this.props;
+        const { questionsUser, showAnswered, showNotAnswered } = this.state;
+        const handleChange = name => event => {
+            this.setState({ ...this.state, [name]: event.target.checked });
+            
+
+          };
         return (
             <React.Fragment>
             <CssBaseline />
        
                 <Grid container justify="center">
-                    <Grid key='1' item direction="column" xs={9} container justify="center" >
+                    <Grid key='0' item xs={4}>
+                    </Grid>
+                    <Grid key='1' item direction="column" xs={7} container justify="center" >
                         {questionsUser && questionsUser.map((question) => (
                             <Container maxWidth="md" className={classes.container} key={question.id}>
                                 <Question questionsUser={question} type={questionType.PREVIEW}/>
                             </Container>
                         ))}
                     </Grid>
-                    <Grid key='2' item xs={3}>
-                        <form className={classes.form}>
+                    <Grid key='2' item xs={1}>
                             <Typography>
                                 Status
                             </Typography>
@@ -86,15 +105,21 @@ class ListQuestion extends Component {
                                 aria-label="question"
                                 name="question">
                                 <FormControlLabel
-                                    control={<Checkbox value="answered" />}
+                                    checked={showAnswered}
+                                    control={<Checkbox value="showAnswered" />}
+                                    onChange={handleChange('showAnswered')}
                                     label="Answered"
+                                    value="showAnswered"
                                 /> 
                                 <FormControlLabel
-                                    control={<Checkbox value="notAnswered" />}
+                                    checked={showNotAnswered}
+                                    control={<Checkbox value="showNotAnswered" />}
                                     label="Not Answered"
+                                    onChange={handleChange('showNotAnswered')}
+                                    value="showNotAnswered"
                                 /> 
                             </FormGroup>
-                        </form>
+                        
                     </Grid>
                  
 
@@ -106,4 +131,10 @@ class ListQuestion extends Component {
     }
 }
 
-export default connect() (withStyles(useStyles)(ListQuestion));
+function mapStateToProps ({authedUser}, { id }) {
+    return {
+      authedUser,
+    }
+  }
+
+export default connect(mapStateToProps) (withStyles(useStyles)(ListQuestion));

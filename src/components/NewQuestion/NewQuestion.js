@@ -19,7 +19,6 @@ const useStyles = theme => ({
         flexGrow: 1,
     },
     container: {
-        
         alignItems: 'center',
         justifyContent: 'center',
 

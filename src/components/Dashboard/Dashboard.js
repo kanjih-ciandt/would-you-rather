@@ -99,7 +99,7 @@ class Dashboard extends Component {
     return (
       <div className={classes.root}>
 
-        <AppBar position="static">
+        <AppBar position="sticky">
             <Grid
               container
               direction="row"
@@ -153,7 +153,7 @@ class Dashboard extends Component {
   }
 }
 
-function mapStateToProps ({authedUser, users, tweets}, { id }) {
+function mapStateToProps ({authedUser}, { id }) {
   return {
     authedUser,
   }

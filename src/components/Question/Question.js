@@ -25,13 +25,14 @@ const useStyles = theme => ({
         flexGrow: 1,
     },
     container: {
-        display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
 
     },
     card: {
-        maxWidth: 600,
+        maxWidth: 500,
+        width: 500,
+
     },
     cardHeader: {
         backgroundColor: grey[300],
@@ -39,9 +40,8 @@ const useStyles = theme => ({
     cardBody: {
         
         display: 'flex',
-    },
-    media: {
-        flexGrow: 1,
+        alignItems: 'center',
+        // justifyContent: 'center',
     },
     
     details: {
@@ -64,7 +64,7 @@ const useStyles = theme => ({
         justifyContent: 'center',
     },
     avatar: {
-        margin: theme.spacing(0, 3, 0),
+        margin: '40px',
         backgroundColor: theme.palette.secondary.main,
         width: 90,
         height: 90,
@@ -216,13 +216,13 @@ class Question extends Component {
                 questionTag = <QuestionPreview classes={classes} text={questionsUser && questionsUser.optionOne.text}/>
                 break;
             case questionType.OPEN:
-                questionTag = <QuestionOpen/>
+                questionTag = <QuestionOpen classes={classes} />
                 break;
             case questionType.CLOSED:
-                    questionTag = <QuestionClosed/>
+                    questionTag = <QuestionClosed classes={classes} />
                 break;
             default:
-                questionTag = <QuestionPreview classes={classes} text={questionsUser && questionsUser.optionOne.text}/>
+                questionTag = <QuestionOpen classes={classes} />
         }
 
 
@@ -234,7 +234,7 @@ class Question extends Component {
                 <div className={classes.cardBody}>
                     <div className={classes.divAvatar}>
                         <Avatar alt="{user.avatarURL}" src={questionsUser && questionsUser.authorUser.avatarURL} className={classes.avatar} />
-                        <div className={classes.vertical}></div>
+                        
                     </div>
                     
                     <div className={classes.details}>
