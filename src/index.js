@@ -33,7 +33,8 @@ const store = createStore(reducer, persistedState, middleware)
 
 store.subscribe( () => {
   saveState({
-    authedUser: store.getState().authedUser
+    authedUser: store.getState().authedUser,
+    tabPosition: store.getState().tabPosition,
   });
 });
 

@@ -154,7 +154,7 @@ class Dashboard extends Component {
   }
 }
 
-function mapStateToProps ({authedUser, tabPosition}, { id }) {
+function mapStateToProps ({authedUser, tabPosition}) {
   return {
     authedUser,
     tabPosition

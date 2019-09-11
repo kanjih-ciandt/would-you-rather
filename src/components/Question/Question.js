@@ -13,6 +13,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { grey, teal } from '@material-ui/core/colors';
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
+import { setTabPosition } from '../../actions/tabPosition';
 
 export const questionType = Object.freeze({
     OPEN:   'OPEN',
@@ -142,7 +143,6 @@ function QuestionPreview (props) {
             <Typography component="h5" variant="h5">
                 Would You Rather ...
             </Typography>
-            <form className={props.classes.form} >
                 <Typography>
                     ...{props.text && props.text.substring(0, 30)} ...
                 </Typography>
@@ -152,10 +152,12 @@ function QuestionPreview (props) {
                     variant="contained"
                     color="primary"
                     className={props.classes.submit}
+                    
+                    onClick={props.handlePreview}
                 >
                     View Pow
                 </Button>
-            </form>
+            
         </React.Fragment>
 }
 
@@ -208,6 +210,16 @@ function QuestionClosed (props) {
 
 
 class Question extends Component {
+    constructor(props) {
+        super(props);
+        this.handlePreview = this.handlePreview.bind(this);
+      }
+
+    handlePreview(event) {
+        this.props.dispatch(setTabPosition(0));
+    }
+
+
     render(){
         const { classes, questionsUser, type } = this.props;
         const author = questionsUser ? `${questionsUser.authorUser.name} asks` : ''
@@ -215,10 +227,10 @@ class Question extends Component {
         let questionTag = null;
         switch(type){
             case questionType.PREVIEW:
-                questionTag = <QuestionPreview classes={classes} text={questionsUser && questionsUser.optionOne.text}/>
+                questionTag = <QuestionPreview classes={classes}  handlePreview={this.handlePreview} text={questionsUser && questionsUser.optionOne.text}/>
                 break;
             case questionType.OPEN:
-                questionTag = <QuestionOpen classes={classes} questionsUser = {questionsUser && questionsUser} />
+                questionTag = <QuestionOpen classes={classes} handlePreview={this.handlePreview} questionsUser = {questionsUser && questionsUser} />
                 break;
             case questionType.CLOSED:
                     questionTag = <QuestionClosed classes={classes} />
@@ -250,4 +262,10 @@ class Question extends Component {
     }
 }
 
-export default connect() (withStyles(useStyles)(Question));
+function mapStateToProps ({tabPosition}) {
+    return {
+      tabPosition
+    }
+}
+
+export default connect(mapStateToProps) (withStyles(useStyles)(Question));
