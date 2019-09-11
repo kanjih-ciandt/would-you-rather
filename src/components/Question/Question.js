@@ -111,6 +111,8 @@ const useStyles = theme => ({
 
 
 function QuestionOpen (props) {
+    const questionOne = props.questionsUser ? props.questionsUser.optionOne.text : ' '
+    const questionTwo = props.questionsUser ? props.questionsUser.optionTwo.text : ' '
     return  <React.Fragment>
             <Typography component="h5" variant="h5">
                 Would You Rather ...
@@ -119,8 +121,8 @@ function QuestionOpen (props) {
                 <RadioGroup
                     aria-label="question"
                     name="question">
-                    <FormControlLabel value="option1" control={<Radio />} label="find $50 yourself" />
-                    <FormControlLabel value="option2" control={<Radio />} label="have your best friend find $500" />    
+                    <FormControlLabel value="option1" control={<Radio />} label={questionOne} />
+                    <FormControlLabel value="option2" control={<Radio />} label={questionTwo} />    
                 </RadioGroup>
                 <Button
                     type="submit"
@@ -216,7 +218,7 @@ class Question extends Component {
                 questionTag = <QuestionPreview classes={classes} text={questionsUser && questionsUser.optionOne.text}/>
                 break;
             case questionType.OPEN:
-                questionTag = <QuestionOpen classes={classes} />
+                questionTag = <QuestionOpen classes={classes} questionsUser = {questionsUser && questionsUser} />
                 break;
             case questionType.CLOSED:
                     questionTag = <QuestionClosed classes={classes} />

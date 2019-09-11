@@ -100,18 +100,18 @@ class ListQuestion extends Component {
                                 aria-label="question"
                                 name="question">
                                 <FormControlLabel
-                                    checked={showAnswered}
-                                    control={<Checkbox value="showAnswered" />}
-                                    onChange={handleChange('showAnswered')}
-                                    label="Answered"
-                                    value="showAnswered"
-                                /> 
-                                <FormControlLabel
                                     checked={showNotAnswered}
                                     control={<Checkbox value="showNotAnswered" />}
                                     label="Not Answered"
                                     onChange={handleChange('showNotAnswered')}
                                     value="showNotAnswered"
+                                /> 
+                                <FormControlLabel
+                                    checked={showAnswered}
+                                    control={<Checkbox value="showAnswered" />}
+                                    onChange={handleChange('showAnswered')}
+                                    label="Answered"
+                                    value="showAnswered"
                                 /> 
                             </FormGroup>
                         </Grid>

@@ -16,6 +16,7 @@ import Home from '../Home/Home';
 import LeaderBoard from '../LeaderBoard/LeaderBoard';
 import ListQuestion from '../ListQuestion/ListQuestion'
 import NewQuestion from '../NewQuestion/NewQuestion'
+import { setTabPosition } from '../../actions/tabPosition';
 
 
 const useStyles = theme => ({
@@ -69,10 +70,6 @@ class Dashboard extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      tabPosition: 1,
-
-    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
@@ -80,9 +77,14 @@ class Dashboard extends Component {
 
   handleChange(event, newValue) {
     console.log(newValue);
-    this.setState(() => ({
-      tabPosition: newValue
-    }));
+    this.props.dispatch(setTabPosition(newValue))
+  }
+
+  componentDidMount(){
+    this.props.tabPosition && 
+      this.setState(() => ({
+        tabPosition: this.props.tabPosition
+      }));
   }
 
   handleSubmit(e) {
@@ -91,8 +93,7 @@ class Dashboard extends Component {
 }
 
   render() {
-    const { tabPosition } = this.state;
-    const { classes } = this.props;
+    const { classes, tabPosition } = this.props;
     const user = this.props.authedUser ? this.props.authedUser.name : ''
     const avatar = this.props.authedUser ? <Avatar alt="{user.avatarURL}" src={this.props.authedUser.avatarURL} className={classes.avatar} /> : <Avatar className={classes.avatar}><AccountCircle /></Avatar>
 
@@ -153,9 +154,10 @@ class Dashboard extends Component {
   }
 }
 
-function mapStateToProps ({authedUser}, { id }) {
+function mapStateToProps ({authedUser, tabPosition}, { id }) {
   return {
     authedUser,
+    tabPosition
   }
 }
 
