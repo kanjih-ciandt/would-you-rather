@@ -13,35 +13,27 @@ import { connect } from 'react-redux';
 import Question,  {questionType} from '../Question/Question';
 import { apiService } from '../../services/api.service';
 
-
-
 const useStyles = theme => ({
     container: {
-        
         alignItems: 'center',
         justifyContent: 'center',
         maxWidth: 1200,
         padding: '10px'
-        
-
     }
 });
 
 class ListQuestion extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
-            questionsUser: null,
             showAnswered: true,
             showNotAnswered: true,
         };
-        
     }
 
-    
-
-    contentEnricher(listQuestion, listUsers){
+    contentEnricher(questions, users){
+        const listQuestion = questions[0];
+        const listUsers = users[0];
         Object.values(listQuestion).forEach(element => {
             const user = Object.values(listUsers).filter(user => user.id === element.author);
             element.authorUser = user[0];
@@ -55,9 +47,11 @@ class ListQuestion extends Component {
           console.log(listAnswered);
           console.log(listNotAnswered);
 
-          return Object.values(listNotAnswered);
+          return {
+            listAnswered: Object.values(listAnswered),  
+            listNotAnswered: Object.values(listNotAnswered),
+            };
     }
-
 
     componentDidMount(){
         Promise.all([
@@ -65,33 +59,34 @@ class ListQuestion extends Component {
             apiService.getUsers(),
           ]).then(result => {
             const [ questions, users ] = result;
-            const listQuestion = Object.values(questions);
-            const listUsers = Object.values(users);
-
+            const { listAnswered,  listNotAnswered} = this.contentEnricher(Object.values(questions), Object.values(users));
             this.setState(() => ({
-                questionsUser: this.contentEnricher(listQuestion[0], listUsers[0]),
-                
+                questionAnswered: listAnswered,
+                questionNotAnswered: listNotAnswered,
             }));
           });
       }
 
     render(){
         const { classes} = this.props;
-        const { questionsUser, showAnswered, showNotAnswered } = this.state;
+        const { questionAnswered, questionNotAnswered, showAnswered, showNotAnswered } = this.state;
         const handleChange = name => event => {
             this.setState({ ...this.state, [name]: event.target.checked });
-            
+        };
 
-          };
         return (
             <React.Fragment>
-            <CssBaseline />
-       
+                <CssBaseline />
                 <Grid container justify="center">
                     <Grid key='0' item xs={4}>
                     </Grid>
                     <Grid key='1' item direction="column" xs={7} container justify="center" >
-                        {questionsUser && questionsUser.map((question) => (
+                        {questionNotAnswered && showNotAnswered && questionNotAnswered.map((question) => (
+                            <Container maxWidth="md" className={classes.container} key={question.id}>
+                                <Question questionsUser={question} type={questionType.PREVIEW}/>
+                            </Container>
+                        ))}
+                        {questionAnswered && showAnswered &&  questionAnswered.map((question) => (
                             <Container maxWidth="md" className={classes.container} key={question.id}>
                                 <Question questionsUser={question} type={questionType.PREVIEW}/>
                             </Container>
@@ -119,14 +114,9 @@ class ListQuestion extends Component {
                                     value="showNotAnswered"
                                 /> 
                             </FormGroup>
-                        
+                        </Grid>
                     </Grid>
-                 
-
-            </Grid>
-            
             </React.Fragment>
-            
         )
     }
 }
@@ -135,6 +125,6 @@ function mapStateToProps ({authedUser}, { id }) {
     return {
       authedUser,
     }
-  }
+}
 
 export default connect(mapStateToProps) (withStyles(useStyles)(ListQuestion));
