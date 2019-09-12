@@ -6,7 +6,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
@@ -43,45 +42,9 @@ class ListQuestion extends Component {
         };
     }
 
-    contentEnricher(questions, users){
-        const listQuestion = questions[0];
-        const listUsers = users[0];
-        Object.values(listQuestion).forEach(element => {
-            const user = Object.values(listUsers).filter(user => user.id === element.author);
-            element.authorUser = user[0];
-            element.answered = this.props.authedUser.questions.includes(element.id)
-          });
-          console.log(listQuestion);
-
-          const listAnswered = Object.values(listQuestion).filter(question => question.answered === true)
-          const listNotAnswered = Object.values(listQuestion).filter(question => question.answered === false)
-          
-          console.log(listAnswered);
-          console.log(listNotAnswered);
-
-          return {
-            listAnswered: Object.values(listAnswered),  
-            listNotAnswered: Object.values(listNotAnswered),
-            };
-    }
-
-    componentDidMount(){
-        Promise.all([
-            apiService.getQuestions(),
-            apiService.getUsers(),
-          ]).then(result => {
-            const [ questions, users ] = result;
-            const { listAnswered,  listNotAnswered} = this.contentEnricher(Object.values(questions), Object.values(users));
-            this.setState(() => ({
-                questionAnswered: listAnswered,
-                questionNotAnswered: listNotAnswered,
-            }));
-          });
-      }
-
     render(){
-        const { classes} = this.props;
-        const { questionAnswered, questionNotAnswered, showAnswered, showNotAnswered } = this.state;
+        const { classes, questionProcessed} = this.props;
+        const { showAnswered, showNotAnswered } = this.state;
         const handleChange = name => event => {
             this.setState({ ...this.state, [name]: event.target.checked });
         };
@@ -89,17 +52,16 @@ class ListQuestion extends Component {
         return (
             <React.Fragment>
             <CssBaseline />
-            
                 <Container maxWidth="md"  className={classes.container}>
                     <div>
-                        {questionNotAnswered && showNotAnswered && questionNotAnswered.map((question) => (
-                            <div className={classes.card}>
+                        {questionProcessed && showNotAnswered && questionProcessed.notAnswered.map((question) => (
+                            <div className={classes.card} key={question.id}>
                                 <Question questionsUser={question} type={questionType.PREVIEW} />
                             </div>
                         ))}
-                        {questionAnswered && showAnswered &&  questionAnswered.map((question) => (
-                            <div className={classes.card}>
-                                <Question questionsUser={question} type={questionType.PREVIEW}/>
+                        {questionProcessed && showAnswered &&  questionProcessed.answered.map((question) => (
+                            <div className={classes.card} key={question.id}>
+                                <Question questionsUser={question} type={questionType.PREVIEW} />
                             </div>
                         ))}
                     </div>
@@ -127,16 +89,32 @@ class ListQuestion extends Component {
                         </FormGroup>
                     </div>
                 </Container>
-                
-                
         </React.Fragment>
         )
     }
 }
 
-function mapStateToProps ({authedUser}, { id }) {
+
+        
+function filterList(questions, authedUser) {
+    // const listQuestion = questions[0];
+      Object.values(questions.questions).forEach(element => {
+        element.answered = authedUser.questions.includes(element.id)
+      });
+      const answered = Object.values(questions.questions).filter(element => element.answered === true)
+      const notAnswered = Object.values(questions.questions).filter(element => element.answered === false)
+      
+      return {answered, notAnswered};
+}
+
+
+function mapStateToProps ({authedUser, tabPosition, questions}) {
+
     return {
       authedUser,
+      tabPosition,
+      questionProcessed: Object.keys(questions).length > 0 && authedUser ? filterList(questions, authedUser) : null,
+      
     }
 }
 

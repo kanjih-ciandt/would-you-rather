@@ -76,7 +76,6 @@ class Dashboard extends Component {
   }
 
   handleChange(event, newValue) {
-    console.log(newValue);
     this.props.dispatch(setTabPosition(newValue))
   }
 

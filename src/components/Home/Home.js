@@ -5,7 +5,6 @@ import Container from '@material-ui/core/Container';
 import Question,  {questionType} from '../Question/Question'
 import { withStyles } from '@material-ui/core/styles';
 import { apiService } from '../../services/api.service';
-import Grid from '@material-ui/core/Grid';
 
 const useStyles = theme => ({
     container: {
@@ -33,9 +32,9 @@ class Home extends Component {
             element.authorUser = user[0];
             element.answered = this.props.authedUser.questions.includes(element.id)
           });
-          console.log(listQuestion);
+          
           const listNotAnswered = Object.values(listQuestion).filter(question => question.answered === false)
-          console.log(listNotAnswered);
+          
 
           return {
                 listNotAnswered: Object.values(listNotAnswered),

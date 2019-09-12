@@ -1,8 +1,10 @@
 import { _getUsers, _getQuestions } from '../mockup/_DATA'
+import { promises } from 'dns';
 
 export const apiService = {
   getUsers,
-  getQuestions
+  getQuestions,
+  getQuestionsAndUsers
 };
 
 
@@ -15,5 +17,15 @@ export const apiService = {
   function getQuestions () {
     return _getQuestions().then((questions) => ({
       questions
+    }))
+  }
+  
+  function getQuestionsAndUsers () {
+    return Promise.all([
+      getQuestions(),
+      getUsers(),
+    ]).then(([questions, users]) => ({
+      questions,
+      users,
     }))
   }

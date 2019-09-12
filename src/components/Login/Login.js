@@ -77,7 +77,6 @@ class Login extends Component {
     componentDidMount(){
       apiService.getUsers()
       .then(({ users}) => {
-        console.log(users);
         this.setState(() => ({
           users: Object.values(users),
         }));
