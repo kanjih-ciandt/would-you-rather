@@ -10,7 +10,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import Question,  {questionType} from '../Question/Question';
-import { apiService } from '../../services/api.service';
 
 const useStyles = theme => ({
     container: {
@@ -93,11 +92,8 @@ class ListQuestion extends Component {
         )
     }
 }
-
-
         
 function filterList(questions, authedUser) {
-    // const listQuestion = questions[0];
       Object.values(questions.questions).forEach(element => {
         element.answered = authedUser.questions.includes(element.id)
       });
@@ -108,13 +104,10 @@ function filterList(questions, authedUser) {
 }
 
 
-function mapStateToProps ({authedUser, tabPosition, questions}) {
-
+function mapStateToProps ({authedUser, questions}) {
     return {
       authedUser,
-      tabPosition,
       questionProcessed: Object.keys(questions).length > 0 && authedUser ? filterList(questions, authedUser) : null,
-      
     }
 }
 

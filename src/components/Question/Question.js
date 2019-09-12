@@ -14,6 +14,7 @@ import { grey, teal } from '@material-ui/core/colors';
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
 import { setTabPosition } from '../../actions/tabPosition';
+import { setCurrentQuestion } from '../../actions/currentQuestion';
 
 export const questionType = Object.freeze({
     OPEN:   'OPEN',
@@ -217,13 +218,16 @@ class Question extends Component {
 
     handlePreview(event) {
         this.props.dispatch(setTabPosition(0));
+        console.log(this.props.questionsUser.id)
+        this.props.dispatch(setCurrentQuestion(this.props.questionsUser));
     }
 
 
     render(){
         const { classes, questionsUser, type } = this.props;
         const author = questionsUser ? `${questionsUser.authorUser.name} asks` : ''
-
+        
+        
         let questionTag = null;
         switch(type){
             case questionType.PREVIEW:
@@ -236,7 +240,7 @@ class Question extends Component {
                     questionTag = <QuestionClosed classes={classes} />
                 break;
             default:
-                questionTag = <QuestionOpen classes={classes} />
+                questionTag = <QuestionClosed classes={classes} />
         }
 
 
@@ -248,6 +252,7 @@ class Question extends Component {
                 <div className={classes.cardBody}>
                     <div className={classes.divAvatar}>
                         <Avatar alt="{user.avatarURL}" src={questionsUser && questionsUser.authorUser.avatarURL} className={classes.avatar} />
+                        
                         
                     </div>
                     

@@ -4,7 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Question,  {questionType} from '../Question/Question'
 import { withStyles } from '@material-ui/core/styles';
-import { apiService } from '../../services/api.service';
+
 
 const useStyles = theme => ({
     container: {
@@ -24,55 +24,40 @@ class Home extends Component {
         };
     }
 
-    contentEnricher(questions, users){
-        const listQuestion = questions[0];
-        const listUsers = users[0];
-        Object.values(listQuestion).forEach(element => {
-            const user = Object.values(listUsers).filter(user => user.id === element.author);
-            element.authorUser = user[0];
-            element.answered = this.props.authedUser.questions.includes(element.id)
-          });
-          
-          const listNotAnswered = Object.values(listQuestion).filter(question => question.answered === false)
-          
-
-          return {
-                listNotAnswered: Object.values(listNotAnswered),
-          };
-    }
-
-
-    componentDidMount(){
-        Promise.all([
-            apiService.getQuestions(),
-            apiService.getUsers(),
-          ]).then(result => {
-            const [ questions, users ] = result;
-            const { listNotAnswered} = this.contentEnricher(Object.values(questions), Object.values(users));
-            this.setState(() => ({
-                question: listNotAnswered[0],
-            }));
-          });
-      }
-
     render(){
-        const { classes } = this.props;
-        const { question } = this.state;
+        const { classes, currentQuestion } = this.props;
+       
         return (
             <React.Fragment>
             <CssBaseline />
             <Container maxWidth="md" className={classes.container}>
-                <Question questionsUser={question} type={questionType.OPEN}/>
+            <Question questionsUser={currentQuestion && currentQuestion} type={questionType.OPEN}/>
             </Container>
             </React.Fragment>
         )
     }
 }
 
-function mapStateToProps ({authedUser}, { id }) {
-    return {
-      authedUser,
+function filterNotListed(questions, authedUser, currentQuestion) {
+
+    if (Object.keys(currentQuestion).length > 0) {
+        return currentQuestion
     }
+    Object.values(questions.questions).forEach(element => {
+      element.answered = authedUser.questions.includes(element.id)
+    });
+
+    const listQuestion = Object.values(questions.questions).filter(element => element.answered === false)
+
+    return listQuestion[0]
+}
+
+
+function mapStateToProps ({authedUser, questions, currentQuestion}) {
+  return {
+    authedUser,
+    currentQuestion: Object.keys(questions).length > 0 && authedUser ? filterNotListed(questions, authedUser, currentQuestion) : null,
+  }
 }
 
 export default connect(mapStateToProps) (withStyles(useStyles)(Home));
