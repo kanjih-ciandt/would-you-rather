@@ -163,46 +163,66 @@ function QuestionPreview (props) {
 }
 
 function QuestionClosed (props) {
+    const questionOne = {
+        text: props.questionsUser ? props.questionsUser.optionOne.text : ' ',
+        votes: props.questionsUser ? props.questionsUser.optionOne.votes.length : 0,
+        voted: props.authedUser && props.questionsUser && props.questionsUser.optionOne.votes.includes(props.authedUser.id)
+    }
+    const questionTwo = {
+        text: props.questionsUser ? props.questionsUser.optionTwo.text : ' ',
+        votes: props.questionsUser ? props.questionsUser.optionTwo.votes.length : 0,
+        voted: props.authedUser && props.questionsUser && props.questionsUser.optionTwo.votes.includes(props.authedUser.id)
+    }
+    
+    const totalVotes = questionOne.votes + questionTwo.votes
+    questionOne.percent = questionOne.votes === 0 ? 0 : (questionOne.votes / totalVotes) * 100
+    questionTwo.percent = questionTwo.votes === 0 ? 0 : (questionTwo.votes / totalVotes) * 100
+
+    questionOne.theme =  questionOne.percent > questionTwo.percent  ? props.classes.resultBoxWin: props.classes.resultBoxLoser
+    questionTwo.theme =  questionTwo.percent > questionOne.percent  ? props.classes.resultBoxWin: props.classes.resultBoxLoser
+
+   
     return  <React.Fragment>
             <Typography component="h5" variant="h5">
                 Results:
             </Typography>
-            <div className={props.classes.resultBoxWin}>
-                <Avatar className={props.classes.vote}>Your Vote</Avatar>
+            <div className={questionOne.theme}>
+                {questionOne.voted && <Avatar className={props.classes.vote}>Your Vote</Avatar>}
                 <Typography >
-                    Would you rather find $50 yourself ? 
+                    Would you rather {questionOne.text}
                 </Typography>
-                <Progress percent={67}  status="success"
+                <Progress percent={ questionOne.percent }  status="success"
                     theme={
                         {
                             success: {
-                                symbol: '67' + '%',
-                                trailColor: grey[300],
+                                symbol: ` ${questionOne.percent}%`,
+                                trailColor: grey[400],
                                 color: teal[600]
                             }
                         }
                     }
                 />
                 <Typography align='center'>
-                    2 out 3 votes
+                    {questionOne.votes} out {totalVotes} votes
                 </Typography>
             </div>
-            <div className={props.classes.resultBoxLoser}>
+            <div className={questionTwo.theme}>
+                {questionTwo.voted && <Avatar className={props.classes.vote}>Your Vote</Avatar>}
                 <Typography >
-                    Would you rather have your best friend find $500 ? 
+                Would you rather {questionTwo.text}
                 </Typography>
-                <Progress percent={33}  status="success"
+                <Progress percent={questionTwo.percent}  status="success"
                     theme={
                         {
                             success: {
-                                symbol: '33' + '%',
-                                trailColor: grey[300],
-                                color: grey[600]
+                                symbol: ` ${questionTwo.percent}%`,
+                                trailColor: grey[400],
+                                color: teal[600]
                             }
                         }
                     }/>
                 <Typography align='center'>
-                    1 out 3 votes
+                    {questionTwo.votes} out {totalVotes} votes
                 </Typography>
             </div>
         </React.Fragment>
@@ -224,7 +244,7 @@ class Question extends Component {
 
 
     render(){
-        const { classes, questionsUser, type } = this.props;
+        const { classes, questionsUser, type, authedUser } = this.props;
         const author = questionsUser ? `${questionsUser.authorUser.name} asks` : ''
         
         
@@ -237,7 +257,7 @@ class Question extends Component {
                 questionTag = <QuestionOpen classes={classes} handlePreview={this.handlePreview} questionsUser = {questionsUser && questionsUser} />
                 break;
             case questionType.CLOSED:
-                    questionTag = <QuestionClosed classes={classes} />
+                    questionTag = <QuestionClosed classes={classes} questionsUser= {questionsUser && questionsUser} authedUser={authedUser}/>
                 break;
             default:
                 questionTag = <QuestionClosed classes={classes} />
@@ -267,8 +287,9 @@ class Question extends Component {
     }
 }
 
-function mapStateToProps ({tabPosition}) {
+function mapStateToProps ({authedUser,tabPosition}) {
     return {
+      authedUser,
       tabPosition
     }
 }
