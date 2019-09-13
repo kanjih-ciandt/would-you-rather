@@ -115,6 +115,23 @@ function QuestionOpen (props) {
     const questionOne = props.questionsUser ? props.questionsUser.optionOne.text : ' '
     const questionTwo = props.questionsUser ? props.questionsUser.optionTwo.text : ' '
     const [disabled, setDisabled] = React.useState(true);
+    const [answer, setAnswer] = React.useState('');
+
+    const handleChange = (event) => {
+        setDisabled(false)
+        setAnswer(event.target.value)
+
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(e, answer)
+
+    }
+
+    
+
+    
 
     return  <React.Fragment>
             <Typography component="h5" variant="h5">
@@ -124,9 +141,9 @@ function QuestionOpen (props) {
                 <RadioGroup
                     aria-label="question"
                     name="question"
-                    onChange={() => setDisabled(false)}>
-                    <FormControlLabel value="option1" control={<Radio />} label={questionOne} />
-                    <FormControlLabel value="option2" control={<Radio />} label={questionTwo} />    
+                    onChange={handleChange}>
+                    <FormControlLabel value="optionOne" control={<Radio />} label={questionOne} />
+                    <FormControlLabel value="optionTwo" control={<Radio />} label={questionTwo} />    
                 </RadioGroup>
                 <Button
                     type="submit"
@@ -135,6 +152,7 @@ function QuestionOpen (props) {
                     color="primary"
                     className={props.classes.submit}
                     disabled = {disabled}
+                    onClick={handleSubmit}
                 >
                     Submit
                 </Button>
@@ -245,6 +263,8 @@ class Question extends Component {
         this.props.dispatch(setCurrentQuestion(this.props.questionsUser));
     }
 
+   
+
 
     render(){
         const { classes, questionsUser, type, authedUser } = this.props;
@@ -257,7 +277,7 @@ class Question extends Component {
                 questionTag = <QuestionPreview classes={classes}  handlePreview={this.handlePreview} text={questionsUser && questionsUser.optionOne.text}/>
                 break;
             case questionType.OPEN:
-                questionTag = <QuestionOpen classes={classes} handlePreview={this.handlePreview} questionsUser = {questionsUser && questionsUser} />
+                questionTag = <QuestionOpen classes={classes} questionsUser = {questionsUser && questionsUser} />
                 break;
             case questionType.CLOSED:
                     questionTag = <QuestionClosed classes={classes} questionsUser= {questionsUser && questionsUser} authedUser={authedUser}/>
