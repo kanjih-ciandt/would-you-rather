@@ -2,57 +2,29 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { grey, teal } from '@material-ui/core/colors';
-import { Progress } from 'react-sweet-progress';
+import { grey, teal, blue } from '@material-ui/core/colors';
 import "react-sweet-progress/lib/style.css";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Box from '@material-ui/core/Box';
+import Icon from '@material-ui/core/Icon';
 
 
 
-
-import Container from '@material-ui/core/Container';
-import { gray, bold } from 'ansi-colors';
 
 const useStyles = theme => ({
     root: {
         flexGrow: 1,
     },
-    listBase: {
-        width: '100%',
-        maxWidth: 360,
-        backgroundColor: theme.palette.background.paper,
-    },
     container: {
-        display: 'flex',
         alignItems: 'center',
         justifyContent: 'center' 
 
-    },
-    card: {
-        // maxWidth: 400,
-    },
-    cardHeader: {
-        backgroundColor: grey[300],
     },
     cardBody: {
         display: 'flex',
         position: 'relative',
     },
-    media: {
-        flexGrow: 1,
-    },
-    
     details: {
         flexDirection: 'column',
         alignItems: 'center',
@@ -60,12 +32,6 @@ const useStyles = theme => ({
       },
     content: {
         flex: '1 0 auto',
-    },
-    controls: {
-        display: 'flex',
-        alignItems: 'center',
-        paddingLeft: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
     },
     divAvatar: {
         display: 'flex',
@@ -85,44 +51,18 @@ const useStyles = theme => ({
       submit: {
         margin: theme.spacing(1, 0, 0),
       },
-      
-      resultBoxWin: {
-          position: 'relative',
-          borderRadius: '10px',
-          border:'1px solid Teal',
-          backgroundColor: teal[100],
-          margin: theme.spacing(1, 1, 1),
-          padding: theme.spacing(3),
-
-      },
-      resultBoxLoser: {
-        position: 'relative',
-        borderRadius: '10px',
-        border:`1px solid Grey`,
-        backgroundColor: grey[100],
-        margin: theme.spacing(1, 1, 1),
-        padding: theme.spacing(3),
-
-    },
-    scoreBox: {
-        position: 'relative',
-        borderRadius: '10px',
-        margin: theme.spacing(1, 1, 1),
-        padding: theme.spacing(3),
-
-    },
-    scoreTitle: {
-        margin: theme.spacing(0, 3, 0),
-        fontWeight: 'bold',
-        
+    scoreBox:{
+        display:'flex',
+        alignItems: 'right',
+        justifyContent: 'flex-end'
 
     },
     score: {
-        backgroundColor: theme.palette.secondary.main,
-        width: 40,
-        height: 40,
-        fontSize: '20px',
-        textAlign: 'center'
+        backgroundColor: theme.palette.primary.main,
+        width: 80,
+        height: 80,
+        fontSize: '40px',
+        
       },
     triangleTopLeft: {
         position: 'absolute',
@@ -130,82 +70,88 @@ const useStyles = theme => ({
         left: '0px',
         width: '0',
         height: '0', 
-        borderTop: `60px solid ${grey[200]}`,
+        borderTop: `60px solid ${blue[700]}`,
         borderRight: '60px solid transparent;'
       },
       positionRank: {
         position: 'absolute',
-        top: '10px',
-        left: '10px',
+        top: '8px',
+        left: '6px',
         width: '0',
         height: '0',
        
-      }
+      },
+      first: {
+        color: '#FFC400'
+      },
+      second: {
+        color: '#E0E0E0'
+      },
+      third: {
+        color: '#CD7F32'
+      },
 
 });
 
 
 
 function UserPoint (props) {
+    const {userScore} = props;
+    
     return  <React.Fragment>
             <Typography component="h5" variant="h5">
-                Sarah Edo
+                {userScore.name}
             </Typography>
-            <List className={props.classes.listBase}>
-                {[['Answered questions', 7], ['Created questions', 3]].map(value => {
-                    return (
-                    <ListItem key={value} role={undefined} >
-                        <ListItemText id={value[0]} primary={`${value[0]}`} />
-                        <ListItemText id={value[1]} primary={`${value[1]}`}/>
-                    </ListItem>
-                    );
-                })}
-            </List>
+            <Typography >
+                Answered questions: {userScore.countAnswer}
+            </Typography>
+            <Typography >
+                Created questions: {userScore.countCreated}
+            </Typography>
+            
         </React.Fragment>
 }
 
-function Score (props) {
-    return  <React.Fragment>
-            <Typography align='center' component="div" className={props.classes.scoreTitle}>
-                Score
-            </Typography>
-            <div className={props.classes.scoreBox}>
-                <Avatar className={props.classes.score}>10</Avatar>
-            </div>
-        </React.Fragment>
-}
 
 
 
 
 class LeaderBoardCard extends Component {
+    
     render(){
-        const { classes } = this.props;
+        const { classes, user, position } = this.props;
+        const userScore = {
+            name: user.name,
+            countAnswer: user ?  Object.keys(user.answers).length : 0,
+            countCreated: user ? user.questions.length : 0,
+        }
+        userScore.score = userScore.countAnswer + userScore.countCreated
+        const colorPosition = position === 0 ? classes.first : position === 1 ? classes.second : classes.third
+
+        
         return (
-            <Card className={classes.card}>
+            <Card >
                 <div className={classes.cardBody}>
                     <div className={classes.triangleTopLeft}/>
                     <div className={classes.positionRank}>
-                        1
+                        <Icon className={colorPosition} >emoji_events</Icon>
                     </div>
                     <div className={classes.divAvatar}>
-                        <Avatar alt="{user.avatarURL}" src="batman.png" className={classes.avatar} />
-                        <div className={classes.vertical}></div>
+                        <Avatar alt={user.name} src={user.avatarURL} className={classes.avatar} />
+                        
                     </div>
                     
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
-                            <UserPoint classes={classes} />
+                            <UserPoint classes={classes} userScore={userScore}/>
                         </CardContent>
                     </div>
-                    <div className={classes.divAvatar}>
-                        <div className={classes.vertical}/>
-                    </div>
-                    <div className={classes.details}>
-                        <CardContent className={classes.content}>
-                            <Score classes={classes} />
+                    <div className={classes.scoreBox}>
+                        <CardContent >
+                            <Avatar className={classes.score}>{userScore.score}</Avatar>
                         </CardContent>
                     </div>
+                    
                 </div>
             </Card>
         )

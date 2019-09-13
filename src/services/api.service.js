@@ -1,5 +1,4 @@
 import { _getUsers, _getQuestions } from '../mockup/_DATA'
-import { promises } from 'dns';
 
 export const apiService = {
   getUsers,

@@ -95,7 +95,6 @@ class ListQuestion extends Component {
         
 function filterList(questions, authedUser) {
       Object.values(questions.questions).forEach(element => {
-        // element.answered = authedUser.answers.includes(element.id)
         element.answered = element.optionOne.votes.concat(element.optionTwo.votes).includes(authedUser.id)
       });
       const answered = Object.values(questions.questions).filter(element => element.answered === true)

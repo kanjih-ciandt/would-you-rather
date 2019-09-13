@@ -43,7 +43,6 @@ const useStyles = theme => ({
         
         display: 'flex',
         alignItems: 'center',
-        // justifyContent: 'center',
     },
     
     details: {
