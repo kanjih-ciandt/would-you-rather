@@ -114,6 +114,8 @@ const useStyles = theme => ({
 function QuestionOpen (props) {
     const questionOne = props.questionsUser ? props.questionsUser.optionOne.text : ' '
     const questionTwo = props.questionsUser ? props.questionsUser.optionTwo.text : ' '
+    const [disabled, setDisabled] = React.useState(true);
+
     return  <React.Fragment>
             <Typography component="h5" variant="h5">
                 Would You Rather ...
@@ -121,7 +123,8 @@ function QuestionOpen (props) {
             <form className={props.classes.form} >
                 <RadioGroup
                     aria-label="question"
-                    name="question">
+                    name="question"
+                    onChange={() => setDisabled(false)}>
                     <FormControlLabel value="option1" control={<Radio />} label={questionOne} />
                     <FormControlLabel value="option2" control={<Radio />} label={questionTwo} />    
                 </RadioGroup>
@@ -131,6 +134,7 @@ function QuestionOpen (props) {
                     variant="contained"
                     color="primary"
                     className={props.classes.submit}
+                    disabled = {disabled}
                 >
                     Submit
                 </Button>

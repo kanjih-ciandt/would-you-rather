@@ -47,7 +47,7 @@ function filterNotListed(questions, authedUser, currentQuestion) {
         return currentQuestion
     }
     Object.values(questions.questions).forEach(element => {
-      element.answered = authedUser.questions.includes(element.id)
+      element.answered = element.optionOne.votes.concat(element.optionTwo.votes).includes(authedUser.id)
     });
 
     const listQuestion = Object.values(questions.questions).filter(element => element.answered === false)
