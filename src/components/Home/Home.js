@@ -29,12 +29,13 @@ class Home extends Component {
         const { classes, currentQuestion } = this.props;
 
         const type = currentQuestion && currentQuestion.answered ? questionType.CLOSED : questionType.OPEN
-       
+        const question = currentQuestion ?  <Question questionsUser={currentQuestion && currentQuestion} type={type}/> : 'YOU ANSWERED ALL !!! '
         return (
             <React.Fragment>
             <CssBaseline />
             <Container maxWidth="md" className={classes.container}>
-            <Question questionsUser={currentQuestion && currentQuestion} type={type}/>
+                {question}
+            
             </Container>
             </React.Fragment>
         )

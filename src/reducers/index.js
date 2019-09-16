@@ -6,10 +6,21 @@ import currentQuestion from './currentQuestion'
 import users from './users'
 
 
-export default combineReducers({
+const appReducer =  combineReducers({
     authedUser,
     tabPosition,
     questions,
     currentQuestion,
     users
   }) 
+
+  const rootReducer = (state, action) => {
+    if (action.type === 'LOGOUT') {
+      state = undefined
+    }
+  
+    return appReducer(state, action)
+  }
+
+
+  export default rootReducer;

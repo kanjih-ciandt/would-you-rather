@@ -57,8 +57,8 @@ export function handleAnswerQuestion (qid, answer) {
     dispatch(showLoading())
     return apiService.saveAnswer(questionAnswered)
       .then(() => dispatch(answerQuestion(questionAnswered)))
-      .then(() =>dispatch(loadQuestions()))
-      .then(() =>{
+      .then(() => dispatch(loadQuestions()))
+      .then(() => {
           const { questions} = getState()
           dispatch(setCurrentQuestion(questions.questions[qid]))
         })
