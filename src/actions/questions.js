@@ -1,5 +1,6 @@
 import {apiService} from '../services/api.service'
 import { setCurrentQuestion } from './currentQuestion';
+import { handleLoadUsers } from './users';
 import { showLoading, hideLoading } from 'react-redux-loading'
 
 export const LOAD_QUESTIONS = 'LOAD_QUESTIONS'
@@ -57,11 +58,11 @@ export function handleAnswerQuestion (qid, answer) {
     return apiService.saveAnswer(questionAnswered)
       .then(() => dispatch(answerQuestion(questionAnswered)))
       .then(() =>dispatch(loadQuestions()))
-      // question.answered = true; dispatch(setCurrentQuestion(question))
       .then(() =>{
           const { questions} = getState()
           dispatch(setCurrentQuestion(questions.questions[qid]))
         })
+      .then(() =>dispatch(handleLoadUsers()))
       .then(() => dispatch(hideLoading()))
   }
   

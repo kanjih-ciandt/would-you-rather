@@ -1,8 +1,22 @@
-export const RECEIVE_USERS = 'RECEIVE_USERS'
+import { showLoading, hideLoading } from 'react-redux-loading'
+import {apiService} from '../services/api.service'
 
-export function receiveUsers (users) {
+export const LOAD_USERS = 'LOAD_USERS'
+
+function loadUsers (users) {
   return {
-    type: RECEIVE_USERS,
+    type: LOAD_USERS,
     users,
   }
 } 
+
+export function handleLoadUsers(){
+  return (dispatch) => {
+    dispatch(showLoading())
+    return apiService.getUsers()
+      .then(({ users }) => {
+        dispatch(loadUsers(users))
+        dispatch(hideLoading())
+      });
+  }
+}
