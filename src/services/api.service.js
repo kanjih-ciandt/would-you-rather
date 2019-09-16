@@ -1,9 +1,10 @@
-import { _getUsers, _getQuestions } from '../mockup/_DATA'
+import { _getUsers, _getQuestions, _saveQuestionAnswer } from '../mockup/_DATA'
 
 export const apiService = {
   getUsers,
   getQuestions,
-  getQuestionsAndUsers
+  getQuestionsAndUsers,
+  saveAnswer
 };
 
 
@@ -27,4 +28,9 @@ export const apiService = {
       questions,
       users,
     }))
+  }
+
+  function saveAnswer (answeredQuestion ) {
+    console.log(answeredQuestion);
+    return _saveQuestionAnswer(answeredQuestion)
   }

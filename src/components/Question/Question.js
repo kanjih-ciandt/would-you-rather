@@ -15,6 +15,7 @@ import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
 import { setTabPosition } from '../../actions/tabPosition';
 import { setCurrentQuestion } from '../../actions/currentQuestion';
+import { handleAnswerQuestion } from '../../actions/questions';
 
 export const questionType = Object.freeze({
     OPEN:   'OPEN',
@@ -125,13 +126,11 @@ function QuestionOpen (props) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(e, answer)
+        props.questionsUser.answered = true;
+        props.dispatch(handleAnswerQuestion(props.questionsUser.id,answer));
+        console.log(e, props.questionsUser, answer)
 
     }
-
-    
-
-    
 
     return  <React.Fragment>
             <Typography component="h5" variant="h5">
@@ -196,8 +195,8 @@ function QuestionClosed (props) {
     }
     
     const totalVotes = questionOne.votes + questionTwo.votes
-    questionOne.percent = questionOne.votes === 0 ? 0 : (questionOne.votes / totalVotes) * 100
-    questionTwo.percent = questionTwo.votes === 0 ? 0 : (questionTwo.votes / totalVotes) * 100
+    questionOne.percent = questionOne.votes === 0 ? 0 : Math.round((questionOne.votes / totalVotes) * 100)
+    questionTwo.percent = questionTwo.votes === 0 ? 0 : Math.round((questionTwo.votes / totalVotes) * 100)
 
     questionOne.theme =  questionOne.percent > questionTwo.percent  ? props.classes.resultBoxWin: props.classes.resultBoxLoser
     questionTwo.theme =  questionTwo.percent > questionOne.percent  ? props.classes.resultBoxWin: props.classes.resultBoxLoser
@@ -259,15 +258,11 @@ class Question extends Component {
 
     handlePreview(event) {
         this.props.dispatch(setTabPosition(0));
-        console.log(this.props.questionsUser.id)
         this.props.dispatch(setCurrentQuestion(this.props.questionsUser));
     }
 
-   
-
-
     render(){
-        const { classes, questionsUser, type, authedUser } = this.props;
+        const { classes, questionsUser, type, authedUser, dispatch } = this.props;
         const author = questionsUser ? `${questionsUser.authorUser.name} asks` : ''
         
         
@@ -277,7 +272,7 @@ class Question extends Component {
                 questionTag = <QuestionPreview classes={classes}  handlePreview={this.handlePreview} text={questionsUser && questionsUser.optionOne.text}/>
                 break;
             case questionType.OPEN:
-                questionTag = <QuestionOpen classes={classes} questionsUser = {questionsUser && questionsUser} />
+                questionTag = <QuestionOpen classes={classes} questionsUser = {questionsUser && questionsUser} dispatch = {dispatch} />
                 break;
             case questionType.CLOSED:
                     questionTag = <QuestionClosed classes={classes} questionsUser= {questionsUser && questionsUser} authedUser={authedUser}/>
@@ -295,8 +290,6 @@ class Question extends Component {
                 <div className={classes.cardBody}>
                     <div className={classes.divAvatar}>
                         <Avatar alt="{user.avatarURL}" src={questionsUser && questionsUser.authorUser.avatarURL} className={classes.avatar} />
-                        
-                        
                     </div>
                     
                     <div className={classes.details}>
