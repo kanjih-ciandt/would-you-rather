@@ -4,6 +4,7 @@ import tabPosition from './tabPosition'
 import questions from './questions'
 import currentQuestion from './currentQuestion'
 import users from './users'
+import { loadingBarReducer } from 'react-redux-loading'
 
 
 const appReducer =  combineReducers({
@@ -11,7 +12,8 @@ const appReducer =  combineReducers({
     tabPosition,
     questions,
     currentQuestion,
-    users
+    users,
+    loadingBar: loadingBarReducer,
   }) 
 
   const rootReducer = (state, action) => {

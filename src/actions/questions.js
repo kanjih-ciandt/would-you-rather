@@ -27,12 +27,10 @@ function contentEnricher(listQuestion, listUsers) {
 
 export function loadQuestions () {
   return (dispatch) => {
-    dispatch(showLoading())
     return apiService.getQuestionsAndUsers()
       .then(({ questions, users }) => {
         const listQuestion = contentEnricher(questions, users)
         dispatch(returnQuestions(listQuestion))
-        dispatch(hideLoading())
       });
   }
 } 

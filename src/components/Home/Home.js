@@ -4,6 +4,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Question,  {questionType} from '../Question/Question'
 import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import LoadingBar from 'react-redux-loading'
+
 
 
 const useStyles = theme => ({
@@ -12,7 +15,12 @@ const useStyles = theme => ({
         alignItems: 'center',
         justifyContent: 'center',
         maxWidth: 1200,
-        padding: '10px'
+        padding: '10px',
+        
+
+    },
+    progress: {
+        margin: theme.spacing(1, 1, 1),
 
     }
 });
@@ -29,13 +37,20 @@ class Home extends Component {
         const { classes, currentQuestion } = this.props;
 
         const type = currentQuestion && currentQuestion.answered ? questionType.CLOSED : questionType.OPEN
-        const question = currentQuestion ?  <Question questionsUser={currentQuestion && currentQuestion} type={type}/> : 'YOU ANSWERED ALL !!! '
+
+        let question = ''
+        if(currentQuestion === undefined) {
+            question = 'You answered all questions !!!' 
+        } else {
+            question = currentQuestion ?  <Question questionsUser={currentQuestion && currentQuestion} type={type}/> :  <CircularProgress size={100} />
+        }
+        
         return (
             <React.Fragment>
             <CssBaseline />
+            <LoadingBar />
             <Container maxWidth="md" className={classes.container}>
                 {question}
-            
             </Container>
             </React.Fragment>
         )
@@ -43,7 +58,10 @@ class Home extends Component {
 }
 
 function filterNotListed(questions, authedUser, currentQuestion) {
-
+    if (!(Object.keys(questions).length > 0 && authedUser)) {
+        return null
+    }
+    
     if (Object.keys(currentQuestion).length > 0) {
         return currentQuestion
     }
@@ -60,7 +78,7 @@ function filterNotListed(questions, authedUser, currentQuestion) {
 function mapStateToProps ({authedUser, questions, currentQuestion}) {
   return {
     authedUser,
-    currentQuestion: Object.keys(questions).length > 0 && authedUser ? filterNotListed(questions, authedUser, currentQuestion) : null,
+    currentQuestion: filterNotListed(questions, authedUser, currentQuestion) 
   }
 }
 
