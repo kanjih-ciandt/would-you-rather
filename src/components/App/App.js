@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Router, Route, Switch } from 'react-router-dom'
 import { history } from '../../helpers/history';
 import Dashboard from '../Dashboard/Dashboard'

@@ -25,6 +25,8 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "author": "Kanji Hara Neto",
+  "license": "MIT",
   "browserslist": {
     "production": [
       ">0.2%",
