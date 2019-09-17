@@ -44,7 +44,6 @@ function answerQuestion (questionAnswered) {
   }
 }
 
-
 export function handleAnswerQuestion (qid, answer) {
   return (dispatch, getState) => {
     const { authedUser} = getState()
@@ -65,8 +64,21 @@ export function handleAnswerQuestion (qid, answer) {
       .then(() =>dispatch(handleLoadUsers()))
       .then(() => dispatch(hideLoading()))
   }
-  
-  
+}
 
-
+function aAddQuestion (newQuestion) {
+  return {
+    type: ADD_QUESTION,
+    newQuestion
+  }
+}
+export function handleAddQuestion (newQuestion) {
+  return (dispatch, getState) => {
+    dispatch(showLoading())
+    return apiService.saveQuestion(newQuestion)
+      .then(() => dispatch(aAddQuestion(newQuestion)))
+      .then(() => dispatch(loadQuestions()))
+      .then(() =>dispatch(handleLoadUsers()))
+      .then(() => dispatch(hideLoading()))
+  }
 }

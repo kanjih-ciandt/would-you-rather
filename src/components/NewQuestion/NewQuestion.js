@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import { grey } from '@material-ui/core/colors';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import { handleAddQuestion } from '../../actions/questions';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -67,6 +68,13 @@ class NewQuestion extends Component {
     handleSubmit = (e) => {
         e.preventDefault()
         console.log(this.state)
+        // { optionOneText, optionTwoText, author }
+        this.props.dispatch(handleAddQuestion({
+            optionOneText:this.state.optionOne,
+            optionTwoText:this.state.optionTwo,
+            author: this.props.authedUser.id
+
+        }));
     }
 
     handleChangeOptionOne(event) {
@@ -150,4 +158,10 @@ class NewQuestion extends Component {
     }
 }
 
-export default connect() (withStyles(useStyles)(NewQuestion));
+function mapStateToProps ({authedUser}) {
+    return {
+      authedUser
+    }
+}
+
+export default connect(mapStateToProps) (withStyles(useStyles)(NewQuestion));
