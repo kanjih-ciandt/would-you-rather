@@ -95,7 +95,7 @@ class Dashboard extends Component {
       this.props.dispatch(setTabPosition(this.state.tab))
     }
 
-    const { classes, tabPosition } = this.props;
+    const { classes, tabPosition, question_id } = this.props;
     const user = this.props.authedUser ? this.props.authedUser.name : ''
     const avatar = this.props.authedUser ? <Avatar alt="{user.avatarURL}" src={this.props.authedUser.avatarURL} className={classes.avatar} /> : <Avatar className={classes.avatar}><AccountCircle /></Avatar>
 
@@ -140,7 +140,7 @@ class Dashboard extends Component {
             </Grid>
         </AppBar>
         <TabPanel value={tabPosition} index={0}>
-          <Home/>
+          <Home question_id={question_id}/>
         </TabPanel>
         <TabPanel value={tabPosition} index={1}>
           <ListQuestion/>
@@ -157,14 +157,11 @@ class Dashboard extends Component {
 }
 
 function mapStateToProps ({authedUser, tabPosition}, props) {
-  if(props.match !== undefined){
-    const { id } = props.match.params
-    console.log(id);
-  }
   
   return {
     authedUser,
-    tabPosition
+    tabPosition,
+    question_id: props.match ? props.match.params.question_id : undefined
   }
 }
 

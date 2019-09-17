@@ -6,6 +6,7 @@ import Question,  {questionType} from '../Question/Question'
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import LoadingBar from 'react-redux-loading'
+import { history } from '../../helpers/history';
 
 
 
@@ -34,7 +35,7 @@ class Home extends Component {
     }
 
     render(){
-        const { classes, currentQuestion } = this.props;
+        const { classes, currentQuestion} = this.props;
 
         const type = currentQuestion && currentQuestion.answered ? questionType.CLOSED : questionType.OPEN
 
@@ -57,17 +58,33 @@ class Home extends Component {
     }
 }
 
-function filterNotListed(questions, authedUser, currentQuestion) {
+function filterNotListed(questions, authedUser, currentQuestion, question_id) {
+    
     if (!(Object.keys(questions).length > 0 && authedUser)) {
         return null
     }
+
+    Object.values(questions.questions).forEach(element => {
+        element.answered = element.optionOne.votes.concat(element.optionTwo.votes).includes(authedUser.id)
+    });
+
+    if(question_id !== undefined) {
+        const question = Object.values(questions.questions).filter(element => element.id === question_id)
+        console.log('question_id', question[0] === undefined )
+
+        if(question[0] === undefined){
+            history.push('/not-found')
+        } else {
+            return question[0] 
+        }
+
+    }
+
     
     if (Object.keys(currentQuestion).length > 0) {
         return currentQuestion
     }
-    Object.values(questions.questions).forEach(element => {
-      element.answered = element.optionOne.votes.concat(element.optionTwo.votes).includes(authedUser.id)
-    });
+    
 
     const listQuestion = Object.values(questions.questions).filter(element => element.answered === false)
 
@@ -75,10 +92,11 @@ function filterNotListed(questions, authedUser, currentQuestion) {
 }
 
 
-function mapStateToProps ({authedUser, questions, currentQuestion}) {
+function mapStateToProps ({authedUser, questions, currentQuestion}, props) {
+
   return {
     authedUser,
-    currentQuestion: filterNotListed(questions, authedUser, currentQuestion) 
+    currentQuestion: filterNotListed(questions, authedUser, currentQuestion, props.question_id) 
   }
 }
 

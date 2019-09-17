@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Router, Route } from 'react-router-dom'
+import { Router, Route, Switch } from 'react-router-dom'
 import { history } from '../../helpers/history';
 import Dashboard from '../Dashboard/Dashboard'
 import { PrivateRoute }  from '../PrivateRouter/PrivateRouter'
@@ -17,15 +17,27 @@ class App extends Component {
   render() {
     return (
       <Router  history={history}>
-        <Fragment>
+        <Switch>
           <PrivateRoute path='/' exact component={Dashboard} />
           <Route path="/login" component={Login} />
           <PrivateRoute path="/add" component={() => <Dashboard tab={2} />}/>
           <PrivateRoute path="/leaderboard" component={() => <Dashboard tab={3} />}/>
-        </Fragment>
+          <PrivateRoute path="/questions/:question_id" component={Dashboard}/>
+          <PrivateRoute component={NoMatch} />
+        </Switch>
       </Router>
     );
   }
+}
+
+function NoMatch({ location }) {
+  return (
+    <div>
+      <h3>
+        PAGE NOT FOUND!!! No match for <code>{location.pathname}</code>
+      </h3>
+    </div>
+  );
 }
 
 

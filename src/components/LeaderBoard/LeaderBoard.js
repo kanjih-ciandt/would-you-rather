@@ -33,24 +33,7 @@ class LeaderBoard extends Component {
         
     
     }
-
-    // componentDidMount(){
-    //     apiService.getUsers()
-    //     .then(({ users}) => {
-    //     Object.values(users).forEach(user => {
-    //             const countAnswer = Object.keys(user.answers).length;
-    //             const countCreated =  user.questions.length;
-    //             user.score = countAnswer + countCreated
-    //     });
-            
-    //     this.setState(() => ({
-    //         users: Object.values(users).sort((a,b,) =>  a.score > b.score ? -1 : 1 ).slice(0,3),
-    //       }));
-    //     })
-
-        
-    // }
-    
+  
     render(){
         // const { users } = this.state;
         const { classes, users } = this.props;
