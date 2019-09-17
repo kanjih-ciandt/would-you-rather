@@ -20,6 +20,8 @@ class App extends Component {
         <Fragment>
           <PrivateRoute path='/' exact component={Dashboard} />
           <Route path="/login" component={Login} />
+          <PrivateRoute path="/add" component={() => <Dashboard tab={2} />}/>
+          <PrivateRoute path="/leaderboard" component={() => <Dashboard tab={3} />}/>
         </Fragment>
       </Router>
     );

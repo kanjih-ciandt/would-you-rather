@@ -4,8 +4,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import LeaderBoardCard from '../LeaderBoadCard/LeaderBoardCard'
 import { withStyles } from '@material-ui/core/styles';
-import { apiService } from '../../services/api.service';
-
 
 const useStyles = theme => ({
     root: {

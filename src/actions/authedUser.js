@@ -35,6 +35,7 @@ export function cleanStore () {
 export function logout () {
   return (dispatch) => {
     dispatch(cleanStore())
+    localStorage.removeItem('user')
     history.push('/login')
   }
 } 

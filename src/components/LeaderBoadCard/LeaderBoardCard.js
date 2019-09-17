@@ -5,12 +5,9 @@ import Card from '@material-ui/core/Card';
 import Avatar from '@material-ui/core/Avatar';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { grey, teal, blue } from '@material-ui/core/colors';
+import { blue } from '@material-ui/core/colors';
 import "react-sweet-progress/lib/style.css";
 import Icon from '@material-ui/core/Icon';
-
-
-
 
 const useStyles = theme => ({
     root: {

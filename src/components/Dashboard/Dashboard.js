@@ -67,31 +67,34 @@ function TabPanel(props) {
 
 
 class Dashboard extends Component {
+  state = {
+    tab: this.props.tab
+  };
 
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
   }
 
   handleChange(event, newValue) {
+    this.setState(() => ({
+      tab: undefined,
+    }));
     this.props.dispatch(setTabPosition(newValue))
   }
-
-  componentDidMount(){
-    this.props.tabPosition && 
-      this.setState(() => ({
-        tabPosition: this.props.tabPosition
-      }));
-  }
+  
 
   handleSubmit(e) {
     this.props.dispatch(logout(this.props.authedUser))
-    
-}
+  }
+ 
 
   render() {
+    if(this.state.tab !== undefined) {
+      this.props.dispatch(setTabPosition(this.state.tab))
+    }
+
     const { classes, tabPosition } = this.props;
     const user = this.props.authedUser ? this.props.authedUser.name : ''
     const avatar = this.props.authedUser ? <Avatar alt="{user.avatarURL}" src={this.props.authedUser.avatarURL} className={classes.avatar} /> : <Avatar className={classes.avatar}><AccountCircle /></Avatar>
@@ -153,7 +156,12 @@ class Dashboard extends Component {
   }
 }
 
-function mapStateToProps ({authedUser, tabPosition}) {
+function mapStateToProps ({authedUser, tabPosition}, props) {
+  if(props.match !== undefined){
+    const { id } = props.match.params
+    console.log(id);
+  }
+  
   return {
     authedUser,
     tabPosition
