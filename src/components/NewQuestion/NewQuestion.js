@@ -4,13 +4,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import Avatar from '@material-ui/core/Avatar';
-import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import { grey, teal } from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import Divider from '@material-ui/core/Divider';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -29,108 +26,85 @@ const useStyles = theme => ({
         maxWidth: 600,
     },
     cardHeader: {
-        backgroundColor: grey[300],
-    },
-    cardBody: {
+        backgroundColor: theme.palette.primary.main,
+        color: grey[300],
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center'
         
-        display: 'flex',
-    },
-    media: {
-        flexGrow: 1,
     },
     
     details: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center' 
-      },
-    content: {
-        flex: '1 0 auto',
-    },
-    controls: {
-        display: 'flex',
-        alignItems: 'center',
-        paddingLeft: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-    },
-    divAvatar: {
-        display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        padding: '10px'
     },
-    avatar: {
-        margin: theme.spacing(0, 3, 0),
-        backgroundColor: theme.palette.secondary.main,
-        width: 90,
-        height: 90,
-      },
-      vertical:{
-        borderLeft:'1px solid lightgrey',
-        height:'10em',
-      },
-      submit: {
-        margin: theme.spacing(1, 0, 0),
-      },
-      
-      resultBoxWin: {
-          position: 'relative',
-          borderRadius: '10px',
-          border:'1px solid Teal',
-          backgroundColor: teal[100],
-          margin: theme.spacing(1, 1, 1),
-          padding: theme.spacing(3),
-
-      },
-      resultBoxLoser: {
-        position: 'relative',
-        borderRadius: '10px',
-        border:`1px solid Grey`,
-        backgroundColor: grey[100],
-        margin: theme.spacing(1, 1, 1),
-        padding: theme.spacing(3),
-
+    form: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '10px',
+        margin: '10px'
     },
-    vote: {
-        backgroundColor: theme.palette.secondary.main,
-        width: 40,
-        height: 40,
-        position: 'absolute',
-        top: '-15px',
-        right: '-15px',
-        fontSize: '12px',
-        textAlign: 'center'
-      },
-
+    submit: {
+        marginTop: '10px'
+    }
+    
 });
 
 class NewQuestion extends Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            optionOne: '', 
+            optionTwo: '', 
+        };
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeOptionOne = this.handleChangeOptionOne.bind(this);
+        this.handleChangeOptionTwo = this.handleChangeOptionTwo.bind(this);
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(this.state)
+    }
+
+    handleChangeOptionOne(event) {
+        this.setState({optionOne: event.target.value});
+      }
+    handleChangeOptionTwo(event) {
+        this.setState({optionTwo: event.target.value});
+      }
+
+
     render(){
         const { classes } = this.props;
+
+       
         return (
             <React.Fragment>
             <CssBaseline />
             <Container maxWidth="md" className={classes.container}>
                 <Card className={classes.card}>
                     <CardHeader className={classes.cardHeader}
-                        title="New Question"
+                        title="New Question" 
                     />
                     <div >
-                        <Typography>
-                            Complete the question
+                        <Typography align='center' className={classes.details}>
+                            Complete the question.  Would you rather ...
                         </Typography>
-                        <Typography>
-                            Would you rather
-                        </Typography>
+                     
                         
-                        <form className={classes.form} >
+                        <form  className={classes.form} onSubmit={this.handleSubmit}>
                             <TextField
-                                id="filled-full-width"
+                                id="optionOne"
                                 label="First Option"
-                                style={{ margin: 8 }}
                                 placeholder="Enter Option One Text Here"
                                 fullWidth
                                 margin="normal"
                                 variant="filled"
+                                value={this.state.optionOne}
+                                onChange={this.handleChangeOptionOne}
                                 InputLabelProps={{
                                 shrink: true,
                                 }}
@@ -140,14 +114,15 @@ class NewQuestion extends Component {
                             </Typography>
                             
                             <TextField
-                                id="filled-full-width"
+                                id="optionTwo"
                                 label="Second Option"
-                                style={{ margin: 8 }}
                                 placeholder="Enter Option Two Text Here"
-                                helperText="Full width!"
+                                
                                 fullWidth
                                 margin="normal"
                                 variant="filled"
+                                value={this.state.optionTwo}
+                                onChange={this.handleChangeOptionTwo}
                                 InputLabelProps={{
                                 shrink: true,
                                 }}
@@ -158,6 +133,8 @@ class NewQuestion extends Component {
                             fullWidth
                             variant="contained"
                             color="primary"
+                            disabled={!this.state.optionTwo  || !this.state.optionOne}
+                            
                             className={classes.submit}
                         >
                             SUBMIT
