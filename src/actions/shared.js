@@ -5,7 +5,7 @@ import { handleLoadUsers} from '../actions/users'
 
 export function handleInitialData () {
   return (dispatch) => {
-    dispatch(setTabPosition(0))
+    dispatch(setTabPosition(1))
     dispatch(loadQuestions())
     dispatch(handleLoadUsers())
     

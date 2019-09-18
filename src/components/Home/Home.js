@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import LoadingBar from 'react-redux-loading'
 import { history } from '../../helpers/history';
+import { setTabPosition } from '../../actions/tabPosition';
 
 
 
@@ -40,6 +41,7 @@ class Home extends Component {
         const type = currentQuestion && currentQuestion.answered ? questionType.CLOSED : questionType.OPEN
 
         let question = ''
+        
         if(currentQuestion === undefined) {
             question = 'You answered all questions !!!' 
         } else {
@@ -59,8 +61,9 @@ class Home extends Component {
 }
 
 function filterNotListed(questions, authedUser, currentQuestion, question_id) {
+    console.log('entered here', question_id)
     
-    if (!(Object.keys(questions).length > 0 && authedUser)) {
+    if (!(Object.keys(questions).length > 0 && authedUser) ) {
         return null
     }
 
@@ -71,13 +74,12 @@ function filterNotListed(questions, authedUser, currentQuestion, question_id) {
     if(question_id !== undefined) {
         const question = Object.values(questions.questions).filter(element => element.id === question_id)
         console.log('question_id', question[0] === undefined )
+        console.log('kanji', question[0])
 
-        if(question[0] === undefined){
-            history.push('/not-found')
-        } else {
+        if(question[0] !== undefined){
             return question[0] 
-        }
-
+        }    
+        
     }
 
     

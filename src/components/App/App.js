@@ -22,7 +22,7 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <PrivateRoute path="/add" component={() => <Dashboard tab={2} />}/>
           <PrivateRoute path="/leaderboard" component={() => <Dashboard tab={3} />}/>
-          <PrivateRoute path="/questions/:question_id" component={Dashboard}/>
+          <PrivateRoute path="/questions/:question_id"  component={() => <Dashboard tab={0} />}/>
           <PrivateRoute component={NoMatch} />
         </Switch>
       </Router>
