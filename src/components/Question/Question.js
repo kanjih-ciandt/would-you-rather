@@ -13,9 +13,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { grey, teal } from '@material-ui/core/colors';
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
-import { setTabPosition } from '../../actions/tabPosition';
 import { setCurrentQuestion } from '../../actions/currentQuestion';
 import { handleAnswerQuestion } from '../../actions/questions';
+import { history } from '../../helpers/history';
 
 export const questionType = Object.freeze({
     OPEN:   'OPEN',
@@ -128,7 +128,7 @@ function QuestionOpen (props) {
         e.preventDefault()
         props.questionsUser.answered = true;
         props.dispatch(handleAnswerQuestion(props.questionsUser.id,answer));
-        console.log(e, props.questionsUser, answer)
+        
 
     }
 
@@ -257,8 +257,8 @@ class Question extends Component {
       }
 
     handlePreview(event) {
-        this.props.dispatch(setTabPosition(0));
         this.props.dispatch(setCurrentQuestion(this.props.questionsUser));
+        history.push('/answer')
     }
 
     render(){

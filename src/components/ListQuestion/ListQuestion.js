@@ -36,7 +36,7 @@ class ListQuestion extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showAnswered: true,
+            showAnswered: false,
             showNotAnswered: true,
         };
     }

@@ -56,7 +56,7 @@ class Login extends Component {
     }
 
     handleChange(event, newValue) {
-        const { users } = this.state;
+        const { users } = this.props;
         const user = users.find(user => user.id === newValue.key)
         this.setState(() => ({
             username: newValue.key,
@@ -66,7 +66,8 @@ class Login extends Component {
 
     handleSubmit(e) {
         this.setState({ submitted: true });
-        const { username, users } = this.state;
+        const { username} = this.state;
+        const { users} = this.props
         if (username) {
 
           this.props.dispatch(login(users.find(user => user.id === username)))
@@ -74,19 +75,19 @@ class Login extends Component {
         }
     }
 
-    componentDidMount(){
-      apiService.getUsers()
-      .then(({ users}) => {
-        this.setState(() => ({
-          users: Object.values(users),
-        }));
+    // componentDidMount(){
+    //   apiService.getUsers()
+    //   .then(({ users}) => {
+    //     this.setState(() => ({
+    //       users: Object.values(users),
+    //     }));
         
-      })
-    }
+    //   })
+    // }
   
     render (){
-        const { username, users, user } = this.state;
-        const { classes } = this.props;
+        const { username, user } = this.state;
+        const { classes, users } = this.props;
         const avatar = user ? <Avatar alt="{user.avatarURL}" src={user.avatarURL} className={classes.bigAvatar} /> : <Avatar className={classes.bigAvatar}><LockOutlinedIcon /></Avatar>
         return (
             <Container component="main" maxWidth="xs">
@@ -135,6 +136,12 @@ class Login extends Component {
     }
 }
 
+function mapStateToProps ({users}) {
+  return {
+    users: Object.values(users)
+  }
+}
 
 
-export default connect() (withStyles(useStyles)(Login));
+
+export default connect(mapStateToProps) (withStyles(useStyles)(Login));

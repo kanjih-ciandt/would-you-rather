@@ -6,10 +6,7 @@ import Question,  {questionType} from '../Question/Question'
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import LoadingBar from 'react-redux-loading'
-import { history } from '../../helpers/history';
-import { setTabPosition } from '../../actions/tabPosition';
-
-
+import { history } from '../../helpers/history'
 
 const useStyles = theme => ({
     
@@ -41,8 +38,13 @@ class Home extends Component {
         const type = currentQuestion && currentQuestion.answered ? questionType.CLOSED : questionType.OPEN
 
         let question = ''
-        
-        if(currentQuestion === undefined) {
+
+        console.log('this.state.question_id', this.props.question_id, currentQuestion)
+
+        if(currentQuestion === undefined && this.props.question_id !== undefined) {
+            // history.push(`/${this.props.question_id}`)
+            question = <div>Question ID: <b>{this.props.question_id}</b> not found!!!.</div>
+        } else if(currentQuestion === undefined) {
             question = 'You answered all questions !!!' 
         } else {
             question = currentQuestion ?  <Question questionsUser={currentQuestion && currentQuestion} type={type}/> :  <CircularProgress size={100} />
@@ -61,7 +63,6 @@ class Home extends Component {
 }
 
 function filterNotListed(questions, authedUser, currentQuestion, question_id) {
-    console.log('entered here', question_id)
     
     if (!(Object.keys(questions).length > 0 && authedUser) ) {
         return null
@@ -70,25 +71,21 @@ function filterNotListed(questions, authedUser, currentQuestion, question_id) {
     Object.values(questions.questions).forEach(element => {
         element.answered = element.optionOne.votes.concat(element.optionTwo.votes).includes(authedUser.id)
     });
-
+    
     if(question_id !== undefined) {
         const question = Object.values(questions.questions).filter(element => element.id === question_id)
-        console.log('question_id', question[0] === undefined )
-        console.log('kanji', question[0])
-
-        if(question[0] !== undefined){
-            return question[0] 
-        }    
+        console.log('question_finded',question_id, question[0])
+        return question[0]
         
     }
 
-    
     if (Object.keys(currentQuestion).length > 0) {
         return currentQuestion
     }
     
 
     const listQuestion = Object.values(questions.questions).filter(element => element.answered === false)
+    
 
     return listQuestion[0]
 }
@@ -98,7 +95,8 @@ function mapStateToProps ({authedUser, questions, currentQuestion}, props) {
 
   return {
     authedUser,
-    currentQuestion: filterNotListed(questions, authedUser, currentQuestion, props.question_id) 
+    currentQuestion: filterNotListed(questions, authedUser, currentQuestion, props.question_id), 
+    dddd: props.question_id
   }
 }
 

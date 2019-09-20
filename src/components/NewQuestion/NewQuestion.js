@@ -14,6 +14,7 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { withStyles } from '@material-ui/core/styles';
+import { history } from '../../helpers/history';
 
 const useStyles = theme => ({
     root: {
@@ -94,6 +95,7 @@ class NewQuestion extends Component {
             optionOne: '', 
             optionTwo: '',
             open: true });
+        history.push('/questions')
     }
 
     handleChangeOptionOne(event) {

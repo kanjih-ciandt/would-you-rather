@@ -18,11 +18,13 @@ class App extends Component {
     return (
       <Router  history={history}>
         <Switch>
-          <PrivateRoute path='/' exact component={Dashboard} />
+          <PrivateRoute path='/' exact component={() => <Dashboard tab={1} />}/>
+          <PrivateRoute path='/answer' component={() => <Dashboard tab={0} />}/>
+          <PrivateRoute path="/questions/:question_id"  component={Dashboard}/>
+          <PrivateRoute path="/questions"  component={() => <Dashboard tab={1} />}/>
           <Route path="/login" component={Login} />
           <PrivateRoute path="/add" component={() => <Dashboard tab={2} />}/>
           <PrivateRoute path="/leaderboard" component={() => <Dashboard tab={3} />}/>
-          <PrivateRoute path="/questions/:question_id"  component={() => <Dashboard tab={0} />}/>
           <PrivateRoute component={NoMatch} />
         </Switch>
       </Router>

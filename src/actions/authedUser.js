@@ -20,7 +20,7 @@ export function login (username) {
       .then(() =>{
         dispatch(setAuthedUser(username))
         dispatch(handleInitialData())
-        history.push('/')
+        history.push('/questions')
 
       });
   }
@@ -37,6 +37,7 @@ export function logout () {
     dispatch(cleanStore())
     localStorage.removeItem('user')
     history.push('/login')
+    dispatch(handleInitialData())
   }
 } 
 

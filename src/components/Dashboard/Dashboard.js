@@ -17,6 +17,7 @@ import LeaderBoard from '../LeaderBoard/LeaderBoard';
 import ListQuestion from '../ListQuestion/ListQuestion'
 import NewQuestion from '../NewQuestion/NewQuestion'
 import { setTabPosition } from '../../actions/tabPosition';
+import { history } from '../../helpers/history';
 
 
 const useStyles = theme => ({
@@ -46,6 +47,13 @@ const useStyles = theme => ({
     position: 'center'
   },
 });
+
+const tabValue = {
+  0: '/answer',
+  1: '/questions',
+  2: '/add',
+  3: '/leaderboard'
+}
 
 
 function TabPanel(props) {
@@ -81,7 +89,8 @@ class Dashboard extends Component {
     this.setState(() => ({
       tab: undefined,
     }));
-    this.props.dispatch(setTabPosition(newValue))
+
+    history.push(tabValue[newValue])
   }
   
 
@@ -98,6 +107,7 @@ class Dashboard extends Component {
     const { classes, tabPosition, question_id } = this.props;
     const user = this.props.authedUser ? this.props.authedUser.name : ''
     const avatar = this.props.authedUser ? <Avatar alt="{user.avatarURL}" src={this.props.authedUser.avatarURL} className={classes.avatar} /> : <Avatar className={classes.avatar}><AccountCircle /></Avatar>
+    console.log('question_id', this.props.question_id)
 
     return (
       <div className={classes.root}>
@@ -114,7 +124,7 @@ class Dashboard extends Component {
                   className={classes.tabs}
                   onChange={this.handleChange} aria-label="options table"
                   centered={true}>
-                  <Tab label="Home" id="tab-0" />
+                  <Tab label="Question" id="tab-0" />
                   <Tab label="Question List" id="tab-1" />
                   <Tab label="New Question" id="tab-2" />
                   <Tab label="Leader Board" id="tab-3" />
